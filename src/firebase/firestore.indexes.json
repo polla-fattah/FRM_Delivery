@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "delivery",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "driverID",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "delivery",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "fromId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
