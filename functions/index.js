@@ -1,4 +1,3 @@
-
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
@@ -6,14 +5,17 @@ admin.initializeApp();
 exports.addRoles = functions.https.onCall(async (data, context) => {
   //TODO: only admin can ser roles. Except for the first time and setting it to the shop then anyone can do it
   try {
-    try { await createUser(data.mobile) } catch (er) { }
+    try {
+      await createUser(data.mobile)
+    } catch (er) {}
     let user = await findUser(data.mobile)
 
     await addRole(user.uid, data.role)
 
-    return { message: "Success !!" }
-  }
-  catch (err) {
+    return {
+      message: "Success !!"
+    }
+  } catch (err) {
     return err
   }
 
@@ -22,9 +24,10 @@ exports.addRoles = functions.https.onCall(async (data, context) => {
 async function findUser(mobile) {
   try {
     return await admin.auth().getUserByPhoneNumber(mobile);
-  }
-  catch (err) {
-    return { message: "Error is Error" }
+  } catch (err) {
+    return {
+      message: "Error is Error"
+    }
   }
 }
 
@@ -36,8 +39,7 @@ async function addRole(uid, role) {
     return {
       message: `Success!`
     };
-  }
-  catch (err) {
+  } catch (err) {
     return err;
   }
 
@@ -49,9 +51,7 @@ async function createUser(phone) {
       phoneNumber: phone,
       disabled: false
     })
-  }
-  catch (err) {
+  } catch (err) {
     return err;
   }
 }
-

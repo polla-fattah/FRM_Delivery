@@ -7,7 +7,7 @@ export default {
   delivery: "Delivery",
   archive: "Archive",
   edit_shops: "Shops",
-  edit_regions: "Cars",
+  edit_deliveryGroups: "Cars",
   sharing: "Sharing",
   logout: "Logout",
   //delivery
@@ -23,17 +23,18 @@ export default {
   to: "To",
   call_register: "Please Call 0750 000 000 to register before you can login login",
   drivers: "Drivers",
+  driver: "Driver",
   shop_details: "Shop Details",
   long: "Longitude",
   lati: "Latitude",
-  region: "Region",
+  deliveryGroup: "deliveryGroup",
   noResult: "Sorry, there is no result for this number",
   city: "City",
-  stat:"Statistics",
-  picked:"Picked",
-  delivered:"Delivered",
-  returned:"Returned",
-  noResult:"Sorry, There is no result to show",
+  stat: "Statistics",
+  picked: "Picked",
+  delivered: "Delivered",
+  returned: "Returned",
+  noResult: "Sorry, There is no result to show",
 
 
 

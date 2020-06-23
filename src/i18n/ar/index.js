@@ -7,7 +7,7 @@ export default {
   delivery: "التوصيل",
   archive: "الارشیف",
   edit_shops: "المتاجر",
-  edit_regions: "سیارات",
+  edit_deliveryGroups: "سیارات",
   sharing: "المشاركة",
   logout: "الخروج",
   //delivery
@@ -23,17 +23,18 @@ export default {
   to: "الی",
   call_register: "الرجاء الاتصال بالرقم ٠٧٥٠ ٠٠٠ ٠٠٠٠ قبل ان تتمکن من الدخول",
   drivers: "السائقون",
+  driver: "السائق",
   shop_details: "تفاصيل المحل",
   long: "الخط الطولي",
   lati: "الخط العرضي",
-  region: "منطقة",
+  deliveryGroup: "منطقة",
   noResult: "المعذرة لا یوجد ایة نتیجة لهذا الرقم",
   city: "المدينة",
-  stat:"الاحصاء",
-  picked:"التقط",
-  delivered:"تم التوصيل",
-  returned:"استرجع",
-  noResult:"اسف لا یوجد اية نتيجة",
+  stat: "الاحصاء",
+  picked: "التقط",
+  delivered: "تم التوصيل",
+  returned: "استرجع",
+  noResult: "اسف لا یوجد اية نتيجة",
 
 
 

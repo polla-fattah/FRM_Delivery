@@ -32,33 +32,36 @@
             </template>
           </q-input>
         </q-card-section>
-        <q-card-section class="search-card-element">
+        <q-card-section v-if="$store.getters.isAdmin" class="search-card-element">
           <q-select
             filled
-            v-model="regionInp"
-            :options="$store.getters.getRegionsForSelect"
-            :label="$t('region')"
+            v-model="deliveryGroupInp"
+            :options="$store.getters.getdeliveryGroupsForSelect"
+            :label="$t('deliveryGroup')"
             emit-value
             map-options
             outlined
           />
         </q-card-section>
-        <q-card-section class="search-card-element">
+        <q-card-section v-if="$store.getters.isAdmin" class="search-card-element">
           <q-select
             filled
-            v-model="driverMobileInp"
-            :options="driversListForRegion"
+            v-model="driverUserId"
+            :options="driversListFordeliveryGroup"
             :label="$t('driver')"
             emit-value
             map-options
             outlined
           />
         </q-card-section>
-        <q-card-section class="search-card-element">
+        <q-card-section
+          v-if="$store.getters.isAdmin ||  $store.getters.isDriver"
+          class="search-card-element"
+        >
           <q-input v-model="shopMobileInp" label="Shop" />
         </q-card-section>
         <q-card-section class="search-card-element">
-          <q-input v-model="receiverMobileInp" label="Reciver" />
+          <q-input v-model="customerMobileInp" label="Reciver" />
         </q-card-section>
       </div>
       <q-separator dark></q-separator>
@@ -117,7 +120,8 @@
 <script>
 import Vue from "vue";
 import { deliveryDB } from "src/firebase/init.js";
-
+import firebase from "firebase/app";
+import "firebase/firestore";
 export default Vue.extend({
   name: "PrevDelivery",
   components: {},
@@ -127,10 +131,10 @@ export default Vue.extend({
       dataRef: null,
       dateStart: "",
       dateEnd: "",
-      driverMobileInp: "",
-      receiverMobileInp: "",
+      driverUserId: "",
+      customerMobileInp: "",
       shopMobileInp: "",
-      regionInp: "",
+      deliveryGroupInp: "",
       lastDoc: null,
       deliveryList: [],
       rotating:
@@ -163,9 +167,9 @@ export default Vue.extend({
       return this.$store.getters.getriversForSubSelect;
     },
 
-    driversListForRegion() {
-      this.driverMobileInp = "";
-      return this.driversSelection[this.regionInp];
+    driversListFordeliveryGroup() {
+      this.driverUserId = "";
+      return this.driversSelection[this.deliveryGroupInp];
     },
     userInfo() {
       return this.$store.state.userInfo;
@@ -177,13 +181,16 @@ export default Vue.extend({
       this.dataRef = null;
       this.dateStart = "";
       this.dateEnd = "";
-      this.driverMobileInp = "";
-      this.receiverMobileInp = "";
+      this.driverUserId = "";
+      this.customerMobileInp = "";
       this.shopMobileInp = "";
-      this.regionInp = "";
+      this.deliveryGroupInp = "";
       this.deliveryList = [];
     },
     onSearch() {
+      //TODO: Form Validation
+      console.log("Needs Form Validation");
+      this.deliveryList = [];
       this.fetchData();
     },
     async onLoad() {
@@ -203,17 +210,56 @@ export default Vue.extend({
       return this.$store.getters.isShop ? item.toName : item.fromName;
     },
     async fetchData() {
-      //this.$store.dispatch("fetchDeliveries");
       let that = this;
       let ref = deliveryDB;
+      // Select the right user
       if (this.$store.getters.isDriver) {
-        ref = ref.where("driverID", "==", this.userInfo.id);
+        //ref = ref.where("driverID", "==", this.userInfo.id);
       } else if (this.$store.getters.isShop) {
-        ref = ref.where("fromId", "==", this.userInfo.id);
+        //ref = ref.where("fromId", "==", this.userInfo.id);
       }
-      ref = ref.limit(10);
+
+      // Select the dates if exist
+      if (this.dateStart != "") {
+        console.log("dateStart ");
+        const d1 = this.dateStart.split("/").join("-");
+        const s1 = firebase.firestore.Timestamp.fromDate(new Date(d1));
+        //ref = ref.where("t_request", ">=", s1);
+      }
+      if (this.dateEnd != "") {
+        console.log("dateEnd ");
+
+        const d2 = this.dateEnd.split("/").join("-");
+        const s2 = firebase.firestore.Timestamp.fromDate(new Date(d2));
+        //ref = ref.where("t_request", "<=", s2);
+      }
+      if (this.deliveryGroupInp != "") {
+        console.log("deliveryGroupInp = ", this.deliveryGroupInp);
+        console.log("|" + this.deliveryGroupInp + "|");
+
+        ref = ref.where("deliveryGroup", "==", this.deliveryGroupInp.trim());
+      }
+      if (this.driverUserId != "") {
+        console.log("driverUserId = ", this.driverUserId);
+
+        //ref = ref.where("driverID", "==", this.driverUserId.trim());
+      }
+      if (this.shopMobileInp != "") {
+        console.log("shopMobileInp ");
+
+        //ref = ref.where("fromMobile", "==", this.shopMobileInp);
+      }
+
+      if (this.customerMobileInp != "") {
+        console.log("customerMobileInp ");
+
+        // ref = ref.where("deliveryGroup", "==", this.customerMobileInp);
+      }
+
+      ref = ref.limit(10).orderBy("t_request");
       this.dataRef = ref;
       const querySnapshot = await ref.get();
+      console.log(querySnapshot.empty);
       if (!querySnapshot.empty) {
         querySnapshot.forEach(function(doc) {
           that.lastDoc = doc;
