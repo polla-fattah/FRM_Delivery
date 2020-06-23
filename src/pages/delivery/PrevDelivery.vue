@@ -33,16 +33,32 @@
           </q-input>
         </q-card-section>
         <q-card-section class="search-card-element">
-          <q-input v-model="driverMobileInp" label="Driver" />
+          <q-select
+            filled
+            v-model="regionInp"
+            :options="$store.getters.getRegionsForSelect"
+            :label="$t('region')"
+            emit-value
+            map-options
+            outlined
+          />
+        </q-card-section>
+        <q-card-section class="search-card-element">
+          <q-select
+            filled
+            v-model="driverMobileInp"
+            :options="driversListForRegion"
+            :label="$t('driver')"
+            emit-value
+            map-options
+            outlined
+          />
         </q-card-section>
         <q-card-section class="search-card-element">
           <q-input v-model="shopMobileInp" label="Shop" />
         </q-card-section>
         <q-card-section class="search-card-element">
           <q-input v-model="receiverMobileInp" label="Reciver" />
-        </q-card-section>
-        <q-card-section class="search-card-element">
-          <q-input v-model="regionInp" label="Region" />
         </q-card-section>
       </div>
       <q-separator dark></q-separator>
@@ -53,35 +69,45 @@
       </q-card-actions>
     </q-card>
 
-    <q-infinite-scroll @load="onLoad" :offset="250">
-      <div v-for="(item, index) in deliveryList" :key="index" class="caption">
-        <q-item
-          clickable
-          v-ripple
-          @click="routing(item)"
-          :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'"
-        >
-          <q-item-section avatar>
-            <q-avatar>
-              <q-icon name="double_arrow" size="2.5rem" :style="rotating" />
-            </q-avatar>
-          </q-item-section>
+    <q-scroll-area
+      :thumb-style="thumbStyle"
+      :bar-style="barStyle"
+      id="scroll-area-with-virtual-scroll-1"
+      :style="generalStyle"
+      class="fill-window"
+    >
+      <q-virtual-scroll
+        scroll-target="#scroll-area-with-virtual-scroll-1 > .scroll"
+        :items="deliveryList"
+        :virtual-scroll-item-size="32"
+        class="col"
+      >
+        <template v-slot="{item}">
+          <div class="delivery-list-item">
+            <q-item
+              clickable
+              v-ripple
+              @click="routing(item)"
+              :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'"
+            >
+              <q-item-section avatar>
+                <q-avatar>
+                  <q-icon name="double_arrow" size="2.5rem" :style="rotating" />
+                </q-avatar>
+              </q-item-section>
 
-          <q-item-section>
-            <q-item-label lines="1">{{showTitle(item)}}</q-item-label>
-            <q-item-label caption lines="2">
-              <span class="text-weight-bold">{{item.items}} - {{item.price}}</span>
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-      </div>
-      <template v-slot:loading>
-        <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px"></q-spinner-dots>
-        </div>
-      </template>
-    </q-infinite-scroll>
-
+              <q-item-section>
+                <q-item-label lines="1" class="delivery-list-item-title">{{showTitle(item)}}</q-item-label>
+                <q-item-label caption lines="2">
+                  <span class="text-weight-bold">{{item.toAddress}} - {{item.docid}}</span>
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </div>
+        </template>
+      </q-virtual-scroll>
+      <q-btn @click="onLoad" color="red">Load</q-btn>
+    </q-scroll-area>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="arrow_back" color="secondary" @click="$router.go(-1)" />
     </q-page-sticky>
@@ -106,7 +132,6 @@ export default Vue.extend({
       shopMobileInp: "",
       regionInp: "",
       lastDoc: null,
-
       deliveryList: [],
       rotating:
         this.$i18n.locale == "en-us" ? "" : "transform: rotate(180deg);",
@@ -134,6 +159,14 @@ export default Vue.extend({
     };
   },
   computed: {
+    driversSelection() {
+      return this.$store.getters.getriversForSubSelect;
+    },
+
+    driversListForRegion() {
+      this.driverMobileInp = "";
+      return this.driversSelection[this.regionInp];
+    },
     userInfo() {
       return this.$store.state.userInfo;
     }
@@ -153,24 +186,16 @@ export default Vue.extend({
     onSearch() {
       this.fetchData();
     },
-    async onLoad(index, done) {
-      console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
-
+    async onLoad() {
       if (this.deliveryList && this.dataRef) {
         this.dataRef = this.dataRef.startAfter(this.lastDoc);
 
         const querySnapshot = await this.dataRef.get();
         if (!querySnapshot.empty) {
-          querySnapshot.forEach(function(doc) {
-            console.log("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  0 0 0 0 ");
-            console.log(doc.data().fromName);
-            console.log("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  0 0 0 0 ");
-            that.lastDoc = doc;
-            that.deliveryList.push({ ...doc.data(), docid: doc.id });
+          querySnapshot.forEach(doc => {
+            this.lastDoc = doc;
+            this.deliveryList.push({ ...doc.data(), docid: doc.id });
           });
-          done();
-        } else {
-          done(ture);
         }
       }
     },
@@ -186,14 +211,11 @@ export default Vue.extend({
       } else if (this.$store.getters.isShop) {
         ref = ref.where("fromId", "==", this.userInfo.id);
       }
-      ref = ref.limit(6);
+      ref = ref.limit(10);
       this.dataRef = ref;
       const querySnapshot = await ref.get();
       if (!querySnapshot.empty) {
         querySnapshot.forEach(function(doc) {
-          console.log("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  0 0 0 0 ");
-          console.log(doc.data().fromName);
-          console.log("0 0 0 0 0 0 0 0 0 0 0 0 0 0 0  0 0 0 0 ");
           that.lastDoc = doc;
           that.deliveryList.push({ ...doc.data(), docid: doc.id });
         });

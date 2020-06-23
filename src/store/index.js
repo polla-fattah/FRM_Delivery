@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { db } from 'src/firebase/init.js'
+import {
+  db
+} from 'src/firebase/init.js'
 // import example from './module-example'
 
 Vue.use(Vuex)
@@ -21,11 +23,39 @@ const store = new Vuex.Store({
       return [...state.regions.sort((a, b) => (a.code > b.code) ? 1 : ((b.code > a.code) ? -1 : 0))];
     },
     getRegionsForSelect(state) {
-      console.log(state.regions)
       const r = state.regions
       const result = []
-      for (let i = 0; i < r.length; i++)
-        result.push({ value: r[i].docid, label: r[i].name })
+      for (let i = 0; i < r.length; i++) {
+        result.push({
+          value: r[i].docid,
+          label: r[i].name
+        })
+      }
+
+      return result
+    },
+    getriversForSubSelect(state) {
+      const r = state.regions
+      const result = {}
+      let drivers = []
+      for (let i = 0; i < r.length; i++) {
+        drivers = []
+        let dr = r[i].drivers
+
+        if (dr && dr.length != 0) {
+          drivers = []
+
+          for (let d = 0; d < dr.length; d++) {
+            drivers.push({
+              value: dr[d].userId,
+              label: dr[d].name,
+            })
+          }
+        }
+        result[r[i].docid] = drivers
+
+      }
+
       return result
     },
     getUserID(state) {
@@ -61,11 +91,17 @@ const store = new Vuex.Store({
         doc.data.drivers[i]["id"] = state.regionSeq++
 
       state.regionSeq++;
-      state.regions.push({ ...doc.data, docid: doc.docid, id: state.regionSeq })
+      state.regions.push({
+        ...doc.data,
+        docid: doc.docid,
+        id: state.regionSeq
+      })
     },
     updateRegion(state, doc) {
 
-      const condition = element => { return element.docid === doc.docid };
+      const condition = element => {
+        return element.docid === doc.docid
+      };
       const indx = state.regions.findIndex(condition);
 
       if (!doc.data.drivers)
@@ -75,7 +111,11 @@ const store = new Vuex.Store({
         doc.data.drivers[i]["id"] = state.regionSeq++
       state.regionSeq++;
 
-      state.regions[indx] = { ...doc.data, docid: doc.docid, id: state.regionSeq }
+      state.regions[indx] = {
+        ...doc.data,
+        docid: doc.docid,
+        id: state.regionSeq
+      }
       console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
       console.log(state.regions)
       console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
@@ -94,24 +134,31 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    async loadRegions({ commit }) {
+    async loadRegions({
+      commit
+    }) {
       try {
         db.collection('deliveryGroup').onSnapshot(function (querySnapshot) {
           querySnapshot.docChanges().forEach(function (change) {
             if (change.type === "added") {
-              commit("insertRegion", { data: change.doc.data(), docid: change.doc.id, })
-            }
-            else if (change.type === "modified") {
-              commit("updateRegion", { data: change.doc.data(), docid: change.doc.id, })
-            }
-            else if (change.type === "removed") {
+              commit("insertRegion", {
+                data: change.doc.data(),
+                docid: change.doc.id,
+              })
+            } else if (change.type === "modified") {
+              commit("updateRegion", {
+                data: change.doc.data(),
+                docid: change.doc.id,
+              })
+            } else if (change.type === "removed") {
               console.log(change.doc.id)
-              commit("deleteRegion", { docid: change.doc.id })
+              commit("deleteRegion", {
+                docid: change.doc.id
+              })
             }
           });
         });
-      }
-      catch (err) {
+      } catch (err) {
         console.error(err)
       }
     }
