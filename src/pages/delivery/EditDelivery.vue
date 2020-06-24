@@ -56,7 +56,7 @@ export default Vue.extend({
         this.deliverySend.t_request = firebase.firestore.FieldValue.serverTimestamp();
 
         this.deliverySend.driverID = null;
-        this.deliverySend.region = this.$store.state.userInfo.region;
+        this.deliverySend.regionID = this.$store.state.userInfo.regionID;
 
         this.deliverySend.fromId = this.$store.state.userInfo.id;
         this.deliverySend.fromAddress = this.$store.state.userInfo.address;

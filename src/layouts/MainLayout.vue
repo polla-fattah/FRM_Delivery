@@ -11,7 +11,7 @@
           icon="menu"
           class="q-mx-md"
         />
-        
+
         <q-toolbar-title class="row items-center no-wrap">
           <span id="logo">
             <span id="frmLogo">
@@ -20,7 +20,6 @@
             <span :style="userName">{{$store.getters.getUserName}}</span>
           </span>
         </q-toolbar-title>
-
       </q-toolbar>
     </q-header>
 
@@ -35,12 +34,7 @@
         <q-list padding>
           <template v-for="link in links">
             <template v-if="canSee(link.level)">
-              <q-item
-                clickable
-                class="GPL__drawer-item"
-                @click="navigate(link)"
-                :key="link.text"
-              >
+              <q-item clickable class="GPL__drawer-item" @click="navigate(link)" :key="link.text">
                 <q-item-section avatar>
                   <q-icon size="2em" color="secondary" :name="link.icon" />
                 </q-item-section>

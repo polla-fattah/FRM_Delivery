@@ -7,7 +7,7 @@ export default {
   delivery: "التوصيل",
   archive: "الارشیف",
   edit_shops: "المتاجر",
-  edit_deliveryGroups: "سیارات",
+  edit_regions: "سیارات",
   sharing: "المشاركة",
   logout: "الخروج",
   //delivery

@@ -41,8 +41,13 @@
 
       <q-separator dark />
 
-      <q-card-actions id="control" class="row justify-center">
-        <q-btn color="positive" @click="picked()" :label="$t('picked')" :disable="delivery.status == 30" />
+      <q-card-actions v-if="!fromArchive" id="control" class="row justify-center">
+        <q-btn
+          color="positive"
+          @click="picked()"
+          :label="$t('picked')"
+          :disable="delivery.status == 30"
+        />
         <q-btn color="info" @click="deliverd()" :label="$t('delivered')" />
         <q-btn color="warning" @click="returned()" :label="$t('returned')" />
       </q-card-actions>
@@ -61,7 +66,7 @@ export default Vue.extend({
   name: "ShowDelivery",
   components: {},
   mounted() {},
-  props: ["delivery"],
+  props: ["delivery", "fromArchive"],
   data() {
     return {};
   },

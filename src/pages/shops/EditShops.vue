@@ -25,7 +25,7 @@
           <div class="shpos-info-input">
             <q-select
               filled
-              v-model="shopSend.region"
+              v-model="shopSend.regionID"
               :options="$store.getters.getRegionsForSelect"
               :label="$t('region')"
               emit-value

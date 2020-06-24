@@ -20,8 +20,8 @@
 
       <q-card-actions id="control" class="row justify-center">
         <q-btn color="secondary" @click="submit()" label="Submit" />
-        <q-btn v-if="regionIndx" color="negative" @click="confirm = true" label="Delete" />
-        <q-btn color="warning" @click="$router.go(-1)" label="Cancel" />
+        <q-btn v-if="isRegionIndxExist()" color="negative" @click="confirm = true" label="Delete" />
+        <q-btn color="warning" @click="$router.push({ name: 'ShowRegions' });" label="Cancel" />
       </q-card-actions>
     </q-card>
 
@@ -33,7 +33,7 @@
       class="fill-window"
     >
       <q-virtual-scroll
-        v-if="regionIndx"
+        v-if="isRegionIndxExist()"
         scroll-target="#scroll-area-with-virtual-scroll-1 > .scroll"
         :items="regionSend.drivers"
         :virtual-scroll-item-size="32"
@@ -58,7 +58,7 @@
         </template>
       </q-virtual-scroll>
     </q-scroll-area>
-    <q-page-sticky v-if="regionIndx" position="bottom-right" :offset="[18, 18]">
+    <q-page-sticky v-if="isRegionIndxExist()" position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="add" color="secondary" @click="editDriver(null)" />
     </q-page-sticky>
     <q-dialog v-model="confirm" persistent>
@@ -87,6 +87,9 @@ export default Vue.extend({
   props: ["regionIndx"],
   data() {
     return {
+      regionSend: this.isRegionIndxExist()
+        ? this.$store.state.regions[this.regionIndx]
+        : { name: "", city: "", code: "" },
       confirm: false,
       generalStyle: {
         height: "650px"
@@ -112,12 +115,10 @@ export default Vue.extend({
     };
   },
 
-  computed: {
-    regionSend() {
-      return this.regionIndx ? this.$store.state.regions[this.regionIndx] : {};
-    }
-  },
   methods: {
+    isRegionIndxExist() {
+      return this.regionIndx !== null && this.regionIndx !== undefined;
+    },
     styleFn(offset, height) {
       let pageheight = height - offset - 400;
       this.generalStyle = {
@@ -132,12 +133,10 @@ export default Vue.extend({
     },
     async deleteRegion() {
       try {
-        console.log(this.regionSend);
-        await regionsDB.doc(this.regionSend.id).delete();
-      } catch (error) {
-        console.error(error);
-      }
-      this.$router.go(-1);
+        await regionsDB.doc(this.regionSend.docid).delete();
+        console.log("Hi");
+      } catch (error) {}
+      this.$router.push({ name: "ShowRegions" });
     },
     async submit() {
       try {
@@ -153,7 +152,7 @@ export default Vue.extend({
       } catch (error) {
         console.error(error);
       }
-      this.$router.go(-1);
+      this.$router.push({ name: "ShowRegions" });
     }
   }
 });

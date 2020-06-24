@@ -7,7 +7,7 @@ export default {
   delivery: "Delivery",
   archive: "Archive",
   edit_shops: "Shops",
-  edit_deliveryGroups: "Cars",
+  edit_regions: "Cars",
   sharing: "Sharing",
   logout: "Logout",
   //delivery
@@ -27,7 +27,7 @@ export default {
   shop_details: "Shop Details",
   long: "Longitude",
   lati: "Latitude",
-  deliveryGroup: "deliveryGroup",
+  region: "Region",
   noResult: "Sorry, there is no result for this number",
   city: "City",
   stat: "Statistics",

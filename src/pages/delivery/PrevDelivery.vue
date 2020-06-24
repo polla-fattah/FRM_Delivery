@@ -35,9 +35,9 @@
         <q-card-section v-if="$store.getters.isAdmin" class="search-card-element">
           <q-select
             filled
-            v-model="deliveryGroupInp"
-            :options="$store.getters.getdeliveryGroupsForSelect"
-            :label="$t('deliveryGroup')"
+            v-model="regionInp"
+            :options="$store.getters.getRegionsForSelect"
+            :label="$t('region')"
             emit-value
             map-options
             outlined
@@ -47,7 +47,7 @@
           <q-select
             filled
             v-model="driverUserId"
-            :options="driversListFordeliveryGroup"
+            :options="driversListForRegion"
             :label="$t('driver')"
             emit-value
             map-options
@@ -134,7 +134,7 @@ export default Vue.extend({
       driverUserId: "",
       customerMobileInp: "",
       shopMobileInp: "",
-      deliveryGroupInp: "",
+      regionInp: "",
       lastDoc: null,
       deliveryList: [],
       rotating:
@@ -167,9 +167,9 @@ export default Vue.extend({
       return this.$store.getters.getriversForSubSelect;
     },
 
-    driversListFordeliveryGroup() {
+    driversListForRegion() {
       this.driverUserId = "";
-      return this.driversSelection[this.deliveryGroupInp];
+      return this.driversSelection[this.regionInp];
     },
     userInfo() {
       return this.$store.state.userInfo;
@@ -184,7 +184,7 @@ export default Vue.extend({
       this.driverUserId = "";
       this.customerMobileInp = "";
       this.shopMobileInp = "";
-      this.deliveryGroupInp = "";
+      this.regionInp = "";
       this.deliveryList = [];
     },
     onSearch() {
@@ -214,9 +214,9 @@ export default Vue.extend({
       let ref = deliveryDB;
       // Select the right user
       if (this.$store.getters.isDriver) {
-        //ref = ref.where("driverID", "==", this.userInfo.id);
+        ref = ref.where("driverID", "==", this.userInfo.id);
       } else if (this.$store.getters.isShop) {
-        //ref = ref.where("fromId", "==", this.userInfo.id);
+        ref = ref.where("fromId", "==", this.userInfo.id);
       }
 
       // Select the dates if exist
@@ -224,36 +224,36 @@ export default Vue.extend({
         console.log("dateStart ");
         const d1 = this.dateStart.split("/").join("-");
         const s1 = firebase.firestore.Timestamp.fromDate(new Date(d1));
-        //ref = ref.where("t_request", ">=", s1);
+        ref = ref.where("t_request", ">=", s1);
       }
       if (this.dateEnd != "") {
         console.log("dateEnd ");
 
         const d2 = this.dateEnd.split("/").join("-");
         const s2 = firebase.firestore.Timestamp.fromDate(new Date(d2));
-        //ref = ref.where("t_request", "<=", s2);
+        ref = ref.where("t_request", "<=", s2);
       }
-      if (this.deliveryGroupInp != "") {
-        console.log("deliveryGroupInp = ", this.deliveryGroupInp);
-        console.log("|" + this.deliveryGroupInp + "|");
+      if (this.regionInp != "") {
+        console.log("regionInp = ", this.regionInp);
+        console.log("|" + this.regionInp + "|");
 
-        ref = ref.where("deliveryGroup", "==", this.deliveryGroupInp.trim());
+        ref = ref.where("regionID", "==", this.regionInp);
       }
       if (this.driverUserId != "") {
         console.log("driverUserId = ", this.driverUserId);
 
-        //ref = ref.where("driverID", "==", this.driverUserId.trim());
+        ref = ref.where("driverID", "==", this.driverUserId.trim());
       }
       if (this.shopMobileInp != "") {
         console.log("shopMobileInp ");
 
-        //ref = ref.where("fromMobile", "==", this.shopMobileInp);
+        ref = ref.where("fromMobile", "==", this.shopMobileInp);
       }
 
       if (this.customerMobileInp != "") {
         console.log("customerMobileInp ");
 
-        // ref = ref.where("deliveryGroup", "==", this.customerMobileInp);
+        ref = ref.where("deliveryGroup", "==", this.customerMobileInp);
       }
 
       ref = ref.limit(10).orderBy("t_request");
@@ -269,15 +269,10 @@ export default Vue.extend({
     },
 
     routing(delivery) {
-      if (this.$store.getters.isDriver)
-        this.$router.push({ name: "ShowDelivery", params: { delivery } });
-      else if (this.$store.getters.isShop)
-        this.$router.push({
-          name: "EditDelivery",
-          params: { delivery: delivery, role: this.$store.getters.getRole }
-        });
-      else if (this.$store.getters.isAdmin)
-        this.$router.push({ name: "AssignDriver", params: { delivery } });
+      this.$router.push({
+        name: "ShowDelivery",
+        params: { delivery, fromArchive: true }
+      });
     },
     styleFn(offset, height) {
       let pageheight = height - offset - 10;
