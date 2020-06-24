@@ -130,9 +130,11 @@ export default Vue.extend({
       return this.$user;
     },
     driversList() {
-      const dRegion = this.delivery.region;
+      const dRegion = this.delivery.regionID;
       const filter = e => e.docid.trim() == dRegion.trim();
+
       const region = this.$store.state.regions.find(filter);
+
       return region.drivers;
     }
   },
