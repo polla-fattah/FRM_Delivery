@@ -1,6 +1,6 @@
 <template>
   <q-page id="search-shops" class="column">
-    <div class="fixed-center fixed-top" style="max-width: 650px">
+    <div class="fixed-center fixed-top" style="max-width: 650px; min-width:350px">
       <div class="q-gutter-md">
         <q-input
           v-model="search"
@@ -51,7 +51,7 @@ export default Vue.extend({
           this.noResult = true;
         } else {
           const shop = { ...shops.docs[0].data(), docid: shops.docs[0].id };
-          this.$router.push({name:"EditShop", params:{shop}})
+          this.$router.push({ name: "EditShop", params: { shop } });
           console.log(shop);
         }
       } catch (err) {
