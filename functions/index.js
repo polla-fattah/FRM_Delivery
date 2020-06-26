@@ -17,22 +17,38 @@ exports.updateStat = functions.firestore
     const increment = admin.firestore.FieldValue.increment(1)
     const timestamp = admin.firestore.FieldValue.serverTimestamp()
 
-    const ds = formatDate()
+
+    const d = new Date();
+    const month = d.getMonth() < 9 ? '0' + (d.getMonth() + 1) : '' + (d.getMonth() + 1);
+    const day = d.getDate() <= 9 ? '0' + d.getDate() : '' + d.getDate();
+    const year = d.getFullYear();
+
+
+
+    const ds = [year, month, day].join('-');
+
     const driverDailyRef = db.collection("stats").doc(ds + "_" + a.driverID)
     const driverMonthRef = db.collection("stats").doc(ds.substr(0, 7) + "_" + a.driverID)
 
     const shopDailyRef = db.collection("stats").doc(ds + "_" + a.fromId)
     const shopMonthRef = db.collection("stats").doc(ds.substr(0, 7) + "_" + a.fromId)
 
+
     const driverObj = {
       userType: "driver",
       userID: a.driverID,
-      theDate: timestamp
+      theDate: timestamp,
+      strYear: year,
+      strMonth: month,
+      strDay: day
     }
     const shopObj = {
       userType: "shop",
       userID: a.fromId,
-      theDate: timestamp
+      theDate: timestamp,
+      strYear: year,
+      strMonth: month,
+      strDay: day
     }
 
     const driverDailyDoc = await driverDailyRef.get()
@@ -109,19 +125,7 @@ exports.updateStat = functions.firestore
     return await batch.commit();
   });
 
-function formatDate() {
-  var d = new Date(),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
 
-  if (month.length < 2)
-    month = '0' + month;
-  if (day.length < 2)
-    day = '0' + day;
-
-  return [year, month, day].join('-');
-}
 
 
 

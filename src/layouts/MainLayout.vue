@@ -154,8 +154,8 @@ export default {
           icon: "article",
           text: this.$t("stat"),
           type: "link",
-          url: "Delivery",
-          level: ["driver", "shop", "admin"]
+          url: "StatIndex",
+          level: ["admin"]
         },
         {
           icon: "store",

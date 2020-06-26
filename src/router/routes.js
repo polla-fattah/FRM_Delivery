@@ -110,6 +110,13 @@ const routes = [{
       props: true,
       component: () => import('pages/delivery/PrevDelivery.vue'),
       beforeEnter: defaultGaurd
+    },
+    {
+      path: 'stats',
+      name: 'StatIndex',
+      props: true,
+      component: () => import('pages/stats/Index.vue'),
+      beforeEnter: defaultGaurd
     }
   ]
 }]

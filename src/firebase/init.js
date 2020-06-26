@@ -26,6 +26,7 @@ const currentUser = auth.currentUser
 const usersDB = db.collection('users')
 const deliveryDB = db.collection('delivery')
 const regionsDB = db.collection('deliveryGroup')
+const statsDB = db.collection('stats')
 
 
 export {
@@ -35,5 +36,6 @@ export {
   currentUser,
   usersDB,
   deliveryDB,
-  regionsDB
+  regionsDB,
+  statsDB
 }
