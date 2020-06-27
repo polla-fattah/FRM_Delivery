@@ -48,8 +48,6 @@ export default {
             that.$store.commit("setClaims", null);
             that.$router.push({ name: "LoginFailed" });
           });
-
-          // uid = await this.addNewUser(mobile, role);
         } else {
           this.$store.commit("setUserInfo", {
             ...userData.docs[0].data(),
@@ -60,20 +58,6 @@ export default {
         console.log(err);
       }
     }
-    // async addNewUser(mobile, _role) {
-    //   const role = _role ? _role : "shop";
-    //   try {
-    //     const docRef = await usersDB.add({ mobile, role });
-    //     if (!_role) {
-    //       const addRoles = functions.httpsCallable("addRoles");
-    //       await addRoles({ mobile, role });
-    //       this.$store.commit("setClaimsRole", { role });
-    //     }
-    //     return docRef.id;
-    //   } catch (error) {
-    //     console.log("Error adding document: ", error);
-    //   }
-    // }
   }
 };
 </script>

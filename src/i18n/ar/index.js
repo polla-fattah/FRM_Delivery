@@ -34,7 +34,7 @@ export default {
   picked: "التقط",
   delivered: "تم التوصيل",
   returned: "استرجع",
-  noResult: "اسف لا یوجد اية نتيجة",
+  noResult: "في انتضار دلفريات اخری",
 
 
 

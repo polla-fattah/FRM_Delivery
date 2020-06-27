@@ -1,21 +1,21 @@
 <template>
   <q-layout view="lHh Lpr fff" class="bg-grey-1">
-    <q-header elevated class="bg-white text-grey-8" height-hint="64">
-      <q-toolbar class="GPL__toolbar" style="height: 64px">
+    <q-header elevated class="custom-background" height-hint="80">
+      <q-toolbar class="GPL__toolbar" style="height: 80px">
         <q-btn
           flat
           dense
           round
-          @click="leftDrawerOpen = !leftDrawerOpen"
+          @click="leftDrawerOpen  = !leftDrawerOpen"
           aria-label="Menu"
           icon="menu"
-          class="q-mx-md"
+          class="q-mx-md text-black"
         />
 
         <q-toolbar-title class="row items-center no-wrap">
           <span id="logo">
             <span id="frmLogo">
-              <img class="q-pl-md" style="width:130px;" src="~assets/logo.png" />
+              <img class="q-pl-md" style="width:150px;" src="~assets/logo.png" />
             </span>
             <span :style="userName">{{$store.getters.getUserName}}</span>
           </span>
@@ -55,7 +55,7 @@
       </q-scroll-area>
     </q-drawer>
 
-    <q-page-container class="GPL__page-container">
+    <q-page-container class="GPL__page-container content-background">
       <router-view />
 
       <q-page-sticky v-if="$q.screen.gt.sm" expand position="left">
@@ -78,36 +78,6 @@
               </q-btn>
             </template>
           </template>
-          <q-btn
-            round
-            flat
-            color="grey-8"
-            stack
-            no-caps
-            size="26px"
-            class="language-activate-button"
-            @click="navigate('pp')"
-          >
-            <q-icon size="1.4em" name="language" />
-            <div class="GPL__side-btn__label">{{$t('language')}}</div>
-            <div id="language-menu">
-              <div
-                v-if="$i18n.locale!='krd'"
-                class="language-menu-item lang3"
-                @click="changeLang('krd')"
-              >کوردی</div>
-              <div
-                v-if="$i18n.locale!='ar'"
-                class="language-menu-item lang3"
-                @click="changeLang('ar')"
-              >عربي</div>
-              <div
-                v-if="$i18n.locale!='en-us'"
-                class="language-menu-item"
-                @click="changeLang('en-us')"
-              >English</div>
-            </div>
-          </q-btn>
         </div>
       </q-page-sticky>
     </q-page-container>
@@ -184,11 +154,21 @@ export default {
           type: "method",
           url: "logout",
           level: ["driver", "shop", "admin"]
+        },
+        {
+          icon: "language",
+          text: this.$t("language"),
+          type: "method",
+          url: "openDrawer",
+          level: ["driver", "shop", "admin"]
         }
       ]
     };
   },
   methods: {
+    openDrawer() {
+      this.leftDrawerOpen = true;
+    },
     changeLang(lang) {
       localStorage.setItem("language", lang);
       location.reload();
@@ -204,17 +184,7 @@ export default {
       if (link.type == "link") this.$router.push({ name: link.url });
       else if (link.type == "method") this[link.url]();
     },
-    addRole() {
-      console.log("Adding . . . ");
 
-      const addRoles = functions.httpsCallable("addRoles");
-      addRoles({
-        mobile: "+9641111111111",
-        role: "admin"
-      }).then(result => {
-        console.log(result);
-      });
-    },
     logout() {
       auth.signOut().then(() => {});
       this.$store.commit("setUser", null);
@@ -230,22 +200,20 @@ export default {
   font-size: 1.7em;
 }
 
+.custom-background {
+  background: linear-gradient(
+    to bottom,
+    rgba(245, 246, 246, 1) 0%,
+    rgba(183, 188, 185, 1) 13%,
+    rgba(194, 196, 198, 1) 39%,
+    rgba(221, 223, 227, 1) 80%,
+    rgba(245, 246, 246, 1) 100%
+  );
+}
 .language-activate-button {
   position: relative;
 }
-.language-activate-button #language-menu {
-  position: absolute;
-  display: none;
-  justify-content: space-evenly;
-  background-color: rgba(209, 203, 203, 0.589);
-  opacity: 0.8;
-  left: 60px;
-  top: 30px;
-  transition-duration: 2s;
-}
-.language-activate-button:hover #language-menu {
-  display: flex;
-}
+
 .language-menu-item {
   display: inline-block;
   margin: 0px;
@@ -274,6 +242,14 @@ export default {
 }
 .langu:hover {
   color: green;
+}
+.content-background {
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba(238, 238, 238, 1) 0%,
+    rgba(204, 204, 204, 1) 100%
+  );
 }
 .main-menu-big-icons * {
   color: gray;

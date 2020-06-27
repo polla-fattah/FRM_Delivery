@@ -34,7 +34,7 @@ export default {
   picked: "وەرگیرا",
   delivered: "گەیاندرا",
   returned: "گەڕێندراوە",
-  noResult: "ببورە هیچ ئەنجامێك نییە",
+  noResult: "چاوەڕوانی دێلیڤەری زیاتر",
 
 
 

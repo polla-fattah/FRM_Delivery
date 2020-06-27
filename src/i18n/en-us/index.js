@@ -34,7 +34,7 @@ export default {
   picked: "Picked",
   delivered: "Delivered",
   returned: "Returned",
-  noResult: "Sorry, There is no result to show",
+  noResult: "Waiting for more deliveries!!",
 
 
 
