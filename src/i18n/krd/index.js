@@ -35,6 +35,8 @@ export default {
   delivered: "گەیاندرا",
   returned: "گەڕێندراوە",
   noResult: "چاوەڕوانی دێلیڤەری زیاتر",
+  start: "سەرەتا",
+  end: "کۆتا",
 
 
 

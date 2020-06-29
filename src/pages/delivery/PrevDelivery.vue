@@ -3,7 +3,7 @@
     <q-card class="search-card bg-secondary text-white">
       <div class="search-card-content">
         <q-card-section class="search-card-element">
-          <q-input filled v-model="dateStart" mask="date">
+          <q-input filled v-model="dateStart" mask="date" :label="$t('start')">
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="qDateProxyStart">
@@ -18,7 +18,7 @@
           </q-input>
         </q-card-section>
         <q-card-section class="search-card-element">
-          <q-input filled v-model="dateEnd" mask="date">
+          <q-input filled v-model="dateEnd" mask="date" :label="$t('end')">
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="qDateProxyEnd">

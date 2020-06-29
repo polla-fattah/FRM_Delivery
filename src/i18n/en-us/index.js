@@ -35,6 +35,8 @@ export default {
   delivered: "Delivered",
   returned: "Returned",
   noResult: "Waiting for more deliveries!!",
+  start: "Start",
+  end: "End",
 
 
 

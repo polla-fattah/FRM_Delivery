@@ -35,6 +35,8 @@ export default {
   delivered: "تم التوصيل",
   returned: "استرجع",
   noResult: "في انتضار دلفريات اخری",
+  start: "البداية",
+  end: "النهاية",
 
 
 
