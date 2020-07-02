@@ -1,0 +1,7 @@
+{
+  "appId": "com.frmdelivery",
+  "appName": "FRM Delivery",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}
