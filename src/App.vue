@@ -5,13 +5,14 @@
 </template>
 
 <script>
-import { auth, functions, usersDB } from "src/firebase/init.js";
+import { auth, usersDB } from "src/firebase/init.js";
 import Vue from "vue";
 
 export default {
   name: "App",
   mounted() {
     const that = this;
+    const isMobile = this.$q.platform.is.mobile !== undefined;
     auth.onAuthStateChanged(async function(user) {
       if (user) {
         try {
@@ -24,6 +25,7 @@ export default {
             idTokenResult.claims.role == "driver"
           ) {
             await that.$store.dispatch("loadRegions");
+            await that.$store.dispatch("loadPosition", { isMobile });
           }
           that.$router.push("/delivery");
         } catch (err) {

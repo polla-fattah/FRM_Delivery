@@ -51,20 +51,6 @@
         <q-btn color="warning" @click="$router.go(-1)" :label="$t('cancel')" />
       </q-card-actions>
     </q-card>
-
-    <q-dialog v-model="alert">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Alert</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">{{alertMsg}}</q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup></q-btn>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 
@@ -72,18 +58,12 @@
 import Vue from "vue";
 import firebase from "firebase/app";
 import { usersDB } from "src/firebase/init.js";
-let Geolocation = null;
 
-import("@capacitor/core").then(module => {
-  Geolocation = module.Plugins.Geolocation;
-});
 export default Vue.extend({
   name: "EditShop",
   props: ["shop"],
   data() {
     return {
-      alert: false,
-      alertMsg: "",
       name: "",
       mobile: "",
       address: "",
@@ -95,35 +75,9 @@ export default Vue.extend({
   },
   methods: {
     getCurrentPosition() {
-      if (this.$q.platform.is.mobile) {
-        //this.alert = true;
-        //this.alertMsg = JSON.stringify(Geolocation.getCurrentPosition()); //+ position.coords.longitude;
-        Geolocation.getCurrentPosition()
-          .then(position => {
-            // this.alert = true;
-            // this.alertMsg = "Ma ma"; //+ position.coords.longitude;
-            this.updateLocation(
-              position.coords.longitude,
-              position.coords.latitude
-            );
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      } else {
-        navigator.geolocation.getCurrentPosition(position => {
-          // this.alert = true;
-          // this.alertMsg = "iuiu"; //+ position.coords.longitude;
-          this.updateLocation(
-            position.coords.longitude,
-            position.coords.latitude
-          );
-        });
-      }
-    },
-    updateLocation(lng, ltd) {
-      this.longitude = lng;
-      this.latitude = ltd;
+      const latLng = this.$store.getters.getLatLng;
+      this.latitude = latLng.lat;
+      this.longitude = latLng.lng;
     },
     async submit() {
       try {
@@ -133,8 +87,8 @@ export default Vue.extend({
           address: this.address,
           city: this.city,
           regionID: this.regionID,
-          latitude: this.latitude,
-          longitude: this.longitude
+          latitude: parseFloat(this.latitude),
+          longitude: parseFloat(this.longitude)
         };
         if (this.shop) {
           await usersDB.doc(this.shop.docid).set(data);
@@ -158,20 +112,6 @@ export default Vue.extend({
       this.latitude = this.shop.latitude;
       this.longitude = this.shop.longitude;
     }
-    // this.getCurrentPosition();
-    // // we start listening
-    // this.geoId = Geolocation.watchPosition({}, (position, err) => {
-    //   this.alertMsg = JSON.stringify(position); //error;
-    //   this.alert = true;
-    //   //console.log("New GPS position");
-    //   //this.position = position;
-    // });
-  },
-  beforeDestroy() {
-    console.log("+ + + + + + +  + +  D D D D D D D D D D D  ");
-    console.log(this.shop);
-    // we do cleanup
-    //Geolocation.clearWatch(this.geoId);
   }
 });
 </script>

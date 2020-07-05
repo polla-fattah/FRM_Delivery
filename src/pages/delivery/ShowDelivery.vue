@@ -65,73 +65,47 @@
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="arrow_back" color="dark" @click="$router.go(-1)" />
     </q-page-sticky>
+    <q-dialog v-model="alert">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Alert</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">{{alertMsg}}</q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" v-close-popup></q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
 import Vue from "vue";
-import { db, auth } from "src/firebase/init.js";
+import { deliveryDB, auth } from "src/firebase/init.js";
 
-import MarkerClusterer from "@google/markerclusterer";
 import gmapsInit from "src/util/gmaps.js";
-
-const locations = [
-  {
-    position: {
-      lat: 48.16091,
-      lng: 16.38333
-    }
-  },
-  {
-    position: {
-      lat: 48.17427,
-      lng: 16.32962
-    }
-  },
-  {
-    position: {
-      lat: 48.14614,
-      lng: 16.29703
-    }
-  },
-  {
-    position: {
-      lat: 48.13583,
-      lng: 16.19446
-    }
-  },
-  {
-    position: {
-      lat: 48.306091,
-      lng: 14.28644
-    }
-  },
-  {
-    position: {
-      lat: 47.50304,
-      lng: 9.74707
-    }
-  }
-];
 
 export default Vue.extend({
   name: "ShowDelivery",
 
   props: ["delivery", "fromArchive"],
   data() {
-    return {};
+    return {
+      alert: false,
+      alertMsg: ""
+    };
   },
   async mounted() {
     try {
+      const latlng = this.$store.getters.getLatLng;
       const google = await gmapsInit();
       const directionsService = new google.maps.DirectionsService();
       const directionsDisplay = new google.maps.DirectionsRenderer();
-      const geocoder = new google.maps.Geocoder();
+
       const map = new google.maps.Map(this.$refs.maps_canvas, {
-        center: {
-          lat: 36.1909883,
-          lng: 44.0068523
-        },
+        center: { lat: 36.1909883, lng: 44.0068523 },
         zoom: 12,
         mapTypeId: "roadmap"
       });
@@ -141,31 +115,24 @@ export default Vue.extend({
         map.setZoom(13);
         map.setCenter(marker.getPosition());
       };
-
-      const markers = locations.map(location => {
-        const marker = new google.maps.Marker({ ...location, map });
-        marker.addListener(`click`, () => markerClickHandler(marker));
-
-        return marker;
+      console.log({
+        lat: this.delivery.fromLat,
+        lng: this.delivery.fromLong
       });
-
-      // eslint-disable-next-line no-new
-      new MarkerClusterer(map, markers, {
-        imagePath: `https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m`
-      });
-
       directionsService.route(
         {
-          origin: { lat: 36.1609883, lng: 44.0078523 },
-          destination: { lat: 36.1909883, lng: 44.0068523 },
+          origin: { lat: latlng.lat, lng: latlng.lng },
+          destination: {
+            lat: this.delivery.fromLat,
+            lng: this.delivery.fromLong
+          },
           travelMode: "DRIVING"
         },
         function(response, status) {
-          if (status === "OK") {
-            console.log("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+          if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
           } else {
-            window.alert("Directions request failed due to " + status);
+            console.error("Directions request failed due to " + status);
           }
         }
       );
@@ -198,9 +165,7 @@ export default Vue.extend({
     updateDelivery() {
       let data = { ...this.delivery };
       delete data.id;
-      db.collection("delivery")
-        .doc(this.delivery.id)
-        .set(data);
+      deliveryDB.doc(this.delivery.id).set(data);
     }
   }
 });

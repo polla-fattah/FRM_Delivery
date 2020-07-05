@@ -36,7 +36,7 @@
 import Vue from "vue";
 import firebase from "firebase/app";
 
-import { db, auth, deliveryDB } from "src/firebase/init.js";
+import { deliveryDB } from "src/firebase/init.js";
 
 export default Vue.extend({
   name: "EditDelivery",
@@ -65,6 +65,7 @@ export default Vue.extend({
         this.deliverySend.fromMobile = this.$store.state.userInfo.mobile;
         this.deliverySend.fromName = this.$store.state.userInfo.name;
 
+        this.deliverySend.price = parseFloat(this.deliverySend.price);
         this.deliverySend.status = 50;
 
         this.deliverySend.toId = "";
@@ -74,7 +75,6 @@ export default Vue.extend({
       this.setDelivery();
       try {
         if (this.delivery) {
-          console.log(this.delivery);
           let data = { ...this.deliverySend };
 
           delete data.id;
