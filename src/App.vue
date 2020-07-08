@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { auth, usersDB } from "src/firebase/init.js";
+import { auth, usersDB, messaging } from "src/firebase/init.js";
 import Vue from "vue";
 
 export default {
@@ -24,6 +24,15 @@ export default {
             idTokenResult.claims.role == "admin" ||
             idTokenResult.claims.role == "driver"
           ) {
+            messaging
+              .requestPermission()
+              .then(() => messaging.getToken())
+              .then(token => {
+                console.log("tokentokentokentokenokentokentokentokentoken");
+                console.log(token);
+                console.log("tokentokentokentokentokkentokentokentoken");
+              })
+              .catch(err => console.error(err));
             await that.$store.dispatch("loadRegions");
             await that.$store.dispatch("loadPosition", { isMobile });
           }
@@ -38,6 +47,13 @@ export default {
     });
   },
   methods: {
+    handleTokenRefresh() {
+      return messaging.getToken().then(token => {
+        usersDB.doc().update({
+          messagingToken: token
+        });
+      });
+    },
     async loadUserInfo(mobile, role) {
       let uid = null;
       try {
