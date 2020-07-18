@@ -33,10 +33,13 @@ exports.updateStat = functions.firestore
     const shopDailyRef = db.collection("stats").doc(ds + "_" + a.fromId)
     const shopMonthRef = db.collection("stats").doc(ds.substr(0, 7) + "_" + a.fromId)
 
+    const driverData = (await db.collection("users").doc(a.driverID).get()).data();
+
 
     const driverObj = {
       userType: "driver",
       userID: a.driverID,
+      driverName: driverData.name? driverData.name: "",
       theDate: timestamp,
       strYear: year,
       strMonth: month,
@@ -45,6 +48,7 @@ exports.updateStat = functions.firestore
     const shopObj = {
       userType: "shop",
       userID: a.fromId,
+      shopName: a.fromName,
       theDate: timestamp,
       strYear: year,
       strMonth: month,
@@ -82,7 +86,10 @@ exports.updateStat = functions.firestore
       }
     }
 
-    if (a.status == 40) { // If the driver assigned 
+    if (a.status == 40) { // If the driver assigned
+      if(driverData.messagingToken){ // Send notification to the driver
+        await sendNotification([driverData.messagingToken], a.fromName)
+      }
 
       batch.update(driverDailyRef, {
         assigned: increment
@@ -125,8 +132,40 @@ exports.updateStat = functions.firestore
     return await batch.commit();
   });
 
+  exports.sendNotificationToAdmins = functions.firestore
+  .document('delivery/{deliveryId}')
+  .onCreate(async (snap, context) => {
+    const tokens = [];
+    try{
+      const admins = await db.collection("users").where("role" , "==" , "admin").get();
+
+      admins.forEach(function(doc) {
+        if(doc.data().messagingToken)
+          tokens.push(doc.data().messagingToken)
+      });
+      return sendNotification(tokens, snap.data().fromName);
+    }
+    catch(error){
+      console.error(error);
+      return null;
+    }
 
 
+
+  });
+
+  function sendNotification(tokens, name){
+    const payload = {
+      notification: {
+        title: `New Delivery!`,
+        body: `New Delivery Request from ${name}`,
+        icon: 'https://frmdelivery.com/img/logo.67f84470.png',
+        click_action: `https://frmdelivery.com/`
+      }
+    }
+    return admin.messaging().sendToDevice(tokens, payload);
+
+  }
 
 
 exports.addRoles = functions.https.onCall(async (data, context) => {
@@ -183,20 +222,3 @@ async function createUser(phone) {
   }
 }
 
-
-
-// console.log(a)
-// console.log(b)
-// const ds = formatDate()
-// const increment = admin.firestore.FieldValue.increment(1)
-// const ts1 = admin.firestore.Timestamp.fromDate(new Date(ds + "T00:00:00"))
-// const ts2 = admin.firestore.Timestamp.fromDate(new Date(ds + "T23:56:56"))
-
-// const ref = db.collection("delivery")
-//   .where("t_request", ">=", ts1)
-//   .where("t_request", "<=", ts2);
-// const records = await ref.get();
-// if (!records.empty) {
-//   records.forEach(doc => console.log(doc.data()))
-// }
-// console.log("--------", records.empty)

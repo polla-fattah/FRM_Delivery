@@ -19,22 +19,20 @@ export default {
           const idTokenResult = await user.getIdTokenResult();
           that.$store.commit("setUser", user);
           that.$store.commit("setClaims", idTokenResult.claims);
-          that.loadUserInfo(user.phoneNumber, idTokenResult.claims.role);
+          await that.loadUserInfo(user.phoneNumber, idTokenResult.claims.role);
           if (
             idTokenResult.claims.role == "admin" ||
             idTokenResult.claims.role == "driver"
           ) {
-            messaging
-              .requestPermission()
-              .then(() => messaging.getToken())
-              .then(token => {
-                console.log("tokentokentokentokenokentokentokentokentoken");
-                console.log(token);
-                console.log("tokentokentokentokentokkentokentokentoken");
-              })
-              .catch(err => console.error(err));
             await that.$store.dispatch("loadRegions");
             await that.$store.dispatch("loadPosition", { isMobile });
+            messaging.onTokenRefresh(that.handleToken());
+            messaging.onMessage((payload) => {
+              console.log('Message received. ', payload);
+            });
+            messaging.requestPermission()
+            .then(that.handleToken())
+            .catch(err => console.error("Token Error", err));
           }
           that.$router.push("/delivery");
         } catch (err) {
@@ -47,9 +45,10 @@ export default {
     });
   },
   methods: {
-    handleTokenRefresh() {
-      return messaging.getToken().then(token => {
-        usersDB.doc().update({
+    handleToken() {
+      console.log("handleToken");
+      return messaging.getToken().then( (token) => {
+        usersDB.doc(this.$store.state.userInfo.id).update({
           messagingToken: token
         });
       });
