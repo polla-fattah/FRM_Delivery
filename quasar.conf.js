@@ -2,7 +2,7 @@
  * This file runs in a Node context (it's NOT transpiled by Babel), so use only
  * the ES6 features that are supported by your Node version. https://node.green/
  */
-
+const fs = require('fs');
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
@@ -69,7 +69,12 @@ module.exports = function ( /* ctx */ ) {
     devServer: {
       https: true,
       port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      https: {
+        key: fs.readFileSync('./ssl/server.key'),
+        cert: fs.readFileSync('./ssl/server.crt'),
+        ca: fs.readFileSync('./ssl/ca.pem'),
+      }
     },
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
