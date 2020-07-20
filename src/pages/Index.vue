@@ -1,18 +1,32 @@
 <template>
   <q-page id="page-index">
     <div id="section1">
-      <div style=" max-width: 90%; min-width: 50%; flex-grow:3 ; align-text:center;">
+      <div
+        style=" max-width: 90%; min-width: 50%; flex-grow:3 ; align-text:center;"
+      >
         <q-img src="~assets/index-delivery.png" spinner-color="white" />
       </div>
       <div class="login-container">
         <div class="moto">
-          <a href="http://frm-co.com" target="frm-co" style="text-decoration:none">
+          <a
+            href="http://frm-co.com"
+            target="frm-co"
+            style="text-decoration:none"
+          >
             <div class="moto-element">Fast</div>
           </a>
-          <a href="http://frm-co.com" target="frm-co" style="text-decoration:none">
+          <a
+            href="http://frm-co.com"
+            target="frm-co"
+            style="text-decoration:none"
+          >
             <div class="moto-element">Easy</div>
           </a>
-          <a href="http://frm-co.com" target="frm-co" style="text-decoration:none">
+          <a
+            href="http://frm-co.com"
+            target="frm-co"
+            style="text-decoration:none"
+          >
             <div class="moto-element">Secure</div>
           </a>
         </div>
@@ -102,6 +116,7 @@ export default Vue.extend({
   padding: 20px;
   display: flex;
   flex-direction: column;
+  max-width: 1500px;
 }
 #section1 {
   flex-direction: row;
