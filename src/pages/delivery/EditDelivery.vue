@@ -76,6 +76,12 @@
 
       <q-card-actions id="control" class="row justify-center">
         <q-btn color="secondary" @click="submit()" :label="$t('submit')" />
+        <q-btn
+          color="negative"
+          v-if="delivery && delivery.status == 50"
+          @click="deleteRecord()"
+          :label="$t('delete')"
+        />
         <q-btn color="warning" @click="$router.go(-1)" :label="$t('cancel')" />
       </q-card-actions>
     </q-card>
@@ -151,6 +157,20 @@ export default Vue.extend({
         console.error(error);
       }
       this.$router.go(-1);
+    },
+    deleteRecord() {
+      if (this.delivery && this.delivery.status == 50) {
+        deliveryDB
+          .doc(this.delivery.id)
+          .delete()
+          .then(function() {
+            console.log("Document successfully deleted!");
+          })
+          .catch(function(error) {
+            console.error("Error removing document: ", error);
+          });
+        this.$router.go(-1);
+      }
     }
   }
 });
