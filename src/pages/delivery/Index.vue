@@ -6,7 +6,7 @@
       </q-item-section>
 
       <q-item-section id="delivery-noresult-container" v-if="deliveryList.length == 0">
-        <q-img src="~assets/askdelivery.png" style="width:90wv" spinner-color="white" />
+        <q-img src="~assets/askdelivery.png" style="width:90wv" spinner-color="white"  />
         <q-item-label class="delivery-noresult">{{$t('noResult')}}</q-item-label>
       </q-item-section>
       <q-scroll-area
@@ -20,7 +20,7 @@
         <q-virtual-scroll
           scroll-target="#scroll-area-with-virtual-scroll-1 > .scroll"
           :items="deliveryList"
-          :virtual-scroll-item-size="32"
+          :virtual-scroll-item-size="16"
           class="col"
         >
           <template v-slot="{item}">
@@ -47,7 +47,7 @@
             </div>
           </template>
         </q-virtual-scroll>
-        <q-img src="~assets/narowDelivery.png" spinner-color="white" />
+        <q-img src="~assets/loading.png" spinner-color="white" style="width:30vw"/>
       </q-scroll-area>
     </q-list>
     <q-page-sticky position="bottom-right" :offset="[18, 18]" v-if="$store.getters.isShop">
@@ -201,7 +201,7 @@ export default Vue.extend({
         this.$router.push({ name: "AssignDriver", params: { delivery } });
     },
     styleFn(offset, height) {
-      let pageheight = height - offset - 15;
+      let pageheight = height - offset - 50;
       this.generalStyle = {
         height: pageheight + "px"
       };

@@ -148,9 +148,16 @@ export default Vue.extend({
     },
     async assignDriver(item) {
       try {
+        console.log(
+          item
+        );
         await deliveryDB
           .doc(this.delivery.id)
-          .update({ driverID: item.userId, status: 40 }); //item.id
+          .update({
+            driverID: item.userId,
+            driverName: item.name,
+            status: 40
+          }); //item.id
       } catch (error) {
         console.error(error);
       }
