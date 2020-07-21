@@ -1,62 +1,73 @@
 <template>
-  <q-page id="page-show-delivery" class="column">
-    <q-card :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">
+  <q-page id="page-show-delivery" class="column" :style-fn="styleFn">
+    <q-card :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'">
       <q-card-section id="detail">
-        <div class="text-h6">{{$t('delivery_details')}}</div>
+        <div style="color:#105783;" class="text-h4 text-center">{{ $t("delivery_details") }}</div>
         <div class="delivery-info text-subtitle2">
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('from')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.fromName}} :</span>
+            <span class="delivery-info-item-lable">{{ $t("from") }} :</span>
+            <a
+              :href="`tel:${delivery.fromMobile}`"
+              class="delivery-info-item-data"
+            >{{ delivery.fromName }}</a>
           </div>
           <div class="delivery-info-item">
-            <span class="delivery-info-item-data mobile">
-              <span class="delivery-info-item-lable">{{$t('mobile')}}:</span>
-              <a :href="`tel:${delivery.fromMobile}`">{{delivery.fromMobile}}</a>
+            <span class="delivery-info-item-lable">{{ $t("address") }} :</span>
+            <span class="delivery-info-item-data">
+              {{
+              delivery.fromAddress
+              }}
             </span>
-          </div>
-          <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('address')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.fromLocation}}:</span>
           </div>
           <q-separator />
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('to')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.toName}} :</span>
+            <span class="delivery-info-item-lable">{{ $t("to") }} :</span>
+            <a
+              :href="`tel:${delivery.toMobile}`"
+              class="delivery-info-item-data"
+            >{{ delivery.toName }}</a>
           </div>
-          <div class="delivery-info-item">
-            <span class="delivery-info-item-data mobile">
-              <span class="delivery-info-item-lable">{{$t('mobile')}}:</span>
 
-              <a :href="`tel:${delivery.toMobile}`">{{delivery.toMobile}}</a>
-            </span>
-          </div>
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('address')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.fromLocation}}:</span>
+            <span class="delivery-info-item-lable">{{ $t("address") }} :</span>
+            <span class="delivery-info-item-data">
+              {{
+              delivery.toAddress
+              }}
+            </span>
           </div>
           <q-separator />
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('items')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.items}}</span>
+            <span class="delivery-info-item-lable">{{ $t("items") }} :</span>
+            <span class="delivery-info-item-data">{{ delivery.items }}</span>
           </div>
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('price')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.price}}</span>
+            <span class="delivery-info-item-lable">{{ $t("price") }} :</span>
+            <span class="delivery-info-item-data">{{ delivery.price }}</span>
+          </div>
+          <q-separator v-if="delivery.status != 50" />
+
+          <div v-if="delivery.status != 50" class="delivery-info-item">
+            <span class="delivery-info-item-lable">{{ $t("driver") }} :</span>
+            <span class="delivery-info-item-data">{{ delivery.driverName }}</span>
           </div>
         </div>
       </q-card-section>
-
-      <q-separator dark />
     </q-card>
-    <q-separator />
-    <h4 :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">{{$t("drivers")}}</h4>
+    <div
+      v-if="delivery.status == 50"
+      style="color:#105783;"
+      class="text-h4 text-center"
+      :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'"
+    >{{ $t("drivers") }}</div>
     <q-scroll-area
+      v-if="delivery.status == 50"
       :thumb-style="thumbStyle"
       :bar-style="barStyle"
       id="scroll-area-with-virtual-scroll-1"
       :style="generalStyle"
       class="fill-window"
-      :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'"
+      :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'"
     >
       <q-virtual-scroll
         scroll-target="#scroll-area-with-virtual-scroll-1 > .scroll"
@@ -65,18 +76,18 @@
         separator
         class="col"
       >
-        <template v-slot="{item}">
-          <q-item clickable v-ripple @click="assignDriver(item)">
+        <template v-slot="{ item }">
+          <q-item clickable v-ripple @click="assignDriver(item)" class="driver-list-item">
             <q-item-section avatar>
               <q-avatar>
-                <q-icon name="local_shipping" size="2.5rem" />
+                <q-icon class="icon-class" name="local_shipping" size="2.5rem" />
               </q-avatar>
             </q-item-section>
 
             <q-item-section>
-              <q-item-label lines="1">{{item.name}}</q-item-label>
+              <q-item-label lines="1" class="driver-name">{{ item.name }}</q-item-label>
               <q-item-label caption lines="2">
-                <span class="text-weight-bold">{{item.items}} - {{item.price}}</span>
+                <span class="text-weight-bold">{{ item.car }}</span>
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -102,7 +113,7 @@ export default Vue.extend({
     return {
       seq: 1,
       generalStyle: {
-        height: "650px"
+        height: "450px"
       },
       thumbStyle: {
         right: "3px",
@@ -134,7 +145,7 @@ export default Vue.extend({
       const filter = e => e.docid.trim() == dRegion.trim();
 
       const region = this.$store.state.regions.find(filter);
-
+      console.log(region.drivers);
       return region.drivers;
     }
   },
@@ -148,20 +159,22 @@ export default Vue.extend({
     },
     async assignDriver(item) {
       try {
-        console.log(
-          item
-        );
-        await deliveryDB
-          .doc(this.delivery.id)
-          .update({
-            driverID: item.userId,
-            driverName: item.name,
-            status: 40
-          }); //item.id
+        console.log(item);
+        await deliveryDB.doc(this.delivery.id).update({
+          driverID: item.userId,
+          driverName: item.name,
+          status: 40
+        }); //item.id
       } catch (error) {
         console.error(error);
       }
       this.$router.go(-1);
+    },
+    styleFn(offset, height) {
+      let pageheight = height - offset - 430;
+      this.generalStyle = {
+        height: pageheight + "px"
+      };
     }
   }
 });
@@ -177,11 +190,7 @@ export default Vue.extend({
   margin: 10px;
   width: 80px;
 }
-.delivery-info-item .mobile {
-  color: cadetblue;
-  font-size: 0.8em;
-  padding: 0px 0px 0px 10px;
-}
+
 .delivery-info {
   padding: 8px;
 }
@@ -193,6 +202,24 @@ export default Vue.extend({
   color: dimgrey;
 }
 .delivery-info-item-data {
-  color: black;
+  font-weight: bold;
+  font-size: 1.3em;
+  color: #105783;
+}
+
+.icon-class {
+  color: #26a69a;
+  font-size: 1.4em;
+}
+.driver-name {
+  font-size: 1.3em;
+  color: #105783;
+}
+
+.driver-list-item:nth-child(even) {
+  background: rgba(175, 233, 168, 0.521);
+}
+.driver-list-item:nth-child(odd) {
+  background: rgba(169, 176, 216, 0.459);
 }
 </style>

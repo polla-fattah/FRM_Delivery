@@ -6,7 +6,7 @@
       </q-item-section>
 
       <q-item-section id="delivery-noresult-container" v-if="deliveryList.length == 0">
-        <q-img src="~assets/askdelivery.png" style="width:90wv" spinner-color="white"  />
+        <q-img src="~assets/askdelivery.png" style="width:90wv" spinner-color="white" />
         <q-item-label class="delivery-noresult">{{$t('noResult')}}</q-item-label>
       </q-item-section>
       <q-scroll-area
@@ -47,7 +47,7 @@
             </div>
           </template>
         </q-virtual-scroll>
-        <q-img src="~assets/loading.png" spinner-color="white" style="width:30vw"/>
+        <q-img src="~assets/loading.png" spinner-color="white" style="width:30vw" />
       </q-scroll-area>
     </q-list>
     <q-page-sticky position="bottom-right" :offset="[18, 18]" v-if="$store.getters.isShop">
@@ -243,12 +243,12 @@ export default Vue.extend({
   margin: 0em 2em 0.5em 2em;
   background: linear-gradient(
     135deg,
-    rgba(56, 180, 118, 1) 5%,
-    rgba(94, 153, 117, 1) 32%,
-    rgba(74, 155, 107, 1) 55%,
-    rgba(97, 155, 121, 1) 70%,
-    rgba(51, 158, 95, 1) 81%,
-    rgba(58, 175, 118, 1) 100%
+    rgba(56, 180, 118, 0.6) 5%,
+    rgba(94, 153, 117, 0.6) 32%,
+    rgba(74, 155, 107, 0.6) 55%,
+    rgba(97, 155, 121, 0.6) 70%,
+    rgba(51, 158, 95, 0.6) 81%,
+    rgba(58, 175, 118, 0.6) 100%
   );
 }
 

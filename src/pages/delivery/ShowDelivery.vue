@@ -1,40 +1,48 @@
 <template>
   <q-page id="page-show-delivery" class="column">
-    <q-card :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">
+    <q-card :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'">
       <q-card-section id="detail">
-        <div style="color:#105783;" class="text-h4 text-center">{{$t('delivery_details')}}</div>
+        <div style="color:#105783;" class="text-h4 text-center">{{ $t("delivery_details") }}</div>
         <div class="delivery-info text-subtitle2">
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('from')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.fromName}}</span>
-            <span class="delivery-info-item-data mobile">
-              <a :href="`tel:${delivery.fromMobile}`">{{delivery.fromMobile}}</a>
-            </span>
+            <span class="delivery-info-item-lable">{{ $t("from") }}:</span>
+            <a
+              class="delivery-info-item-data"
+              :href="`tel:${delivery.fromMobile}`"
+            >{{ delivery.fromName }}</a>
           </div>
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('address')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.fromAddress}}:</span>
+            <span class="delivery-info-item-lable">{{ $t("address") }}:</span>
+            <span class="delivery-info-item-data">
+              {{
+              delivery.fromAddress
+              }}
+            </span>
           </div>
           <q-separator />
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('to')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.toName}}</span>
-            <span class="delivery-info-item-data mobile">
-              <a :href="`tel:${delivery.toMobile}`">{{delivery.toMobile}}</a>
-            </span>
+            <span class="delivery-info-item-lable">{{ $t("to") }}:</span>
+            <a
+              class="delivery-info-item-data"
+              :href="`tel:${delivery.toMobile}`"
+            >{{ delivery.toName }}</a>
           </div>
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('address')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.toAddress}}:</span>
+            <span class="delivery-info-item-lable">{{ $t("address") }}:</span>
+            <span class="delivery-info-item-data">
+              {{
+              delivery.toAddress
+              }}
+            </span>
           </div>
           <q-separator />
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('items')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.items}}</span>
+            <span class="delivery-info-item-lable">{{ $t("items") }}:</span>
+            <span class="delivery-info-item-data">{{ delivery.items }}</span>
           </div>
           <div class="delivery-info-item">
-            <span class="delivery-info-item-lable">{{$t('price')}}:</span>
-            <span class="delivery-info-item-data">{{delivery.price}}</span>
+            <span class="delivery-info-item-lable">{{ $t("price") }}:</span>
+            <span class="delivery-info-item-data">{{ delivery.price }}</span>
           </div>
         </div>
       </q-card-section>
@@ -49,7 +57,7 @@
           style="width:120px"
           color="dark"
           @click="deliverd()"
-          :label=" $t('delivered')"
+          :label="$t('delivered')"
         />
         <q-btn
           v-if="delivery.status == 30"
@@ -71,7 +79,7 @@
           <div class="text-h6">Alert</div>
         </q-card-section>
 
-        <q-card-section class="q-pt-none">{{alertMsg}}</q-card-section>
+        <q-card-section class="q-pt-none">{{ alertMsg }}</q-card-section>
 
         <q-card-actions align="right">
           <q-btn flat label="OK" color="primary" v-close-popup></q-btn>
@@ -180,18 +188,6 @@ export default Vue.extend({
 #page-show-delivery #control > * {
   margin: 10px;
   width: 80px;
-}
-.delivery-info-item .mobile {
-  color: cadetblue;
-  font-size: 1em;
-  text-decoration: none;
-  padding: 0px 10px 0px 10px;
-}
-.delivery-info-item .mobile::before {
-  content: "(";
-}
-.delivery-info-item .mobile::after {
-  content: ")";
 }
 .delivery-info {
   padding: 8px;
