@@ -241,15 +241,8 @@ export default Vue.extend({
   /* border: 2px solid red;  */
   border-radius: 15px;
   margin: 0em 2em 0.5em 2em;
-  background: linear-gradient(
-    135deg,
-    rgba(56, 180, 118, 0.6) 5%,
-    rgba(94, 153, 117, 0.6) 32%,
-    rgba(74, 155, 107, 0.6) 55%,
-    rgba(97, 155, 121, 0.6) 70%,
-    rgba(51, 158, 95, 0.6) 81%,
-    rgba(58, 175, 118, 0.6) 100%
-  );
+  background: linear-gradient(to left, #43cea28f, #185b9d8c);
+  box-shadow: 1px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
 .delivery-list-item-title {
@@ -261,5 +254,12 @@ export default Vue.extend({
 #page-delivery {
   height: 100%;
   padding: 5px;
+}
+
+.driver-list-item:nth-child(even) {
+  background: rgba(175, 233, 168, 0.521);
+}
+.driver-list-item:nth-child(odd) {
+  background: rgba(169, 176, 216, 0.459);
 }
 </style>
