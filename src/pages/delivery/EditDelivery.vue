@@ -1,10 +1,7 @@
 <template>
   <q-page id="page-show-delivery" class="column">
     <q-card>
-      <q-card-section
-        id="detail"
-        :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'"
-      >
+      <q-card-section id="detail" :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'">
         <div class="text-h6">{{ $t("delivery_details") }}</div>
         <div class="delivery-info text-subtitle2">
           <div class="delivery-info-input">
@@ -14,6 +11,7 @@
               v-model="send.toName"
               ref="name"
               :label="$t('name')"
+              :disable="delivery == null? false: delivery.status < 40"
               :rules="[val => (val && val.length > 0) || $t('enterValidName')]"
               lazy-rules
             />
@@ -26,6 +24,7 @@
               @blur="fixMobile()"
               ref="mobile"
               :label="$t('mobile')"
+              :disable="delivery == null? false: delivery.status < 40"
               :rules="[
                 val =>
                   (val && val.search(/^0[0-9]{10}$/) == 0) ||
@@ -40,6 +39,7 @@
               v-model="send.toAddress"
               ref="address"
               :label="$t('address')"
+              :disable="delivery == null? false: delivery.status < 40"
               :rules="[
                 val => (val && val.length > 0) || $t('enterValidAddress')
               ]"
@@ -53,6 +53,7 @@
               @blur="fixPrice()"
               ref="price"
               :label="$t('price')"
+              :disable="delivery == null? false: delivery.status < 40"
               :rules="[
                 val =>
                   (val && !isNaN($parseArabic(val))) || $t('enterValidPrice')
@@ -67,6 +68,7 @@
               type="textarea"
               ref="items"
               :label="$t('items')"
+              :disable="delivery == null? false: delivery.status < 40"
             />
           </div>
         </div>
@@ -79,12 +81,25 @@
         <q-btn
           color="negative"
           v-if="delivery && delivery.status == 50"
-          @click="deleteRecord()"
+          @click="confirm = true"
           :label="$t('delete')"
         />
         <q-btn color="warning" @click="$router.go(-1)" :label="$t('cancel')" />
       </q-card-actions>
     </q-card>
+    <q-dialog v-model="confirm" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="highlight_off" color="red" text-color="white"></q-avatar>
+          <span class="q-ml-sm">{{$t('areYouSureDelete')}}</span>
+        </q-card-section>
+
+        <q-card-actions align="center">
+          <q-btn :label="$t('yes')" color="negative" v-close-popup @click="deleteRecord"></q-btn>
+          <q-btn :label="$t('no')" color="primary" v-close-popup></q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -101,7 +116,7 @@ export default Vue.extend({
   },
   props: ["delivery"],
   data() {
-    return { send: null };
+    return { send: null, confirm: false };
   },
   mounted() {
     if (this.delivery)

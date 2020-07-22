@@ -80,7 +80,7 @@
           <q-item clickable v-ripple @click="assignDriver(item)" class="driver-list-item">
             <q-item-section avatar>
               <q-avatar>
-                <q-icon class="icon-class" name="local_shipping" size="2.5rem" />
+                <q-icon class="icon-class" name="local_shipping" />
               </q-avatar>
             </q-item-section>
 
