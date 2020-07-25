@@ -178,16 +178,16 @@ export default Vue.extend({
         deliveryDB
           .doc(this.delivery.id)
           .delete()
-          .then(function() {
+          .then(function () {
             console.log("Document successfully deleted!");
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.error("Error removing document: ", error);
           });
         this.$router.go(-1);
       }
-    }
-  }
+    },
+  },
 });
 </script>
 <style>

@@ -53,6 +53,11 @@ export default {
     yes: "Yes",
     no: "No",
     areYouSureDelete: "Are you sure that you want to delete this item",
+    search: "Search",
+    noShopFound: "No Shop has Found",
+    searchShop: "Search for a Shop"
+
+
 
 
 };

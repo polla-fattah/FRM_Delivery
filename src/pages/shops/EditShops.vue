@@ -5,16 +5,53 @@
         <div class="text-h6">{{$t('shop_details')}}</div>
         <div class="shpos-info text-subtitle2">
           <div class="shpos-info-input">
-            <q-input outlined v-model="name" :label="$t('name')" />
+            <q-input
+              outlined
+              v-model="name"
+              :label="$t('name')"
+              :rules="[val => (val && val.length > 0) || $t('enterValidName')]"
+              lazy-rules
+            />
           </div>
           <div class="shpos-info-input">
-            <q-input outlined v-model="mobile" :label="$t('mobile')" />
+            <q-input
+              outlined
+              v-model="mobile"
+              :label="$t('mobile')"
+              :rules="[
+                val =>
+                  (val && val.search(/^0[0-9]{10}$/) == 0) ||
+                  $t('enterValidMobile')
+              ]"
+              lazy-rules
+            />
           </div>
           <div class="shpos-info-input">
-            <q-input outlined v-model="address" :label="$t('address')" />
+            <q-input
+              outlined
+              v-model="address"
+              :label="$t('address')"
+              :rules="[val => (val && val.length > 0) || $t('enterValidName')]"
+              lazy-rules
+            />
           </div>
           <div class="shpos-info-input">
-            <q-input outlined v-model="city" :label="$t('city')" />
+            <q-input
+              outlined
+              v-model="code"
+              :label="$t('code')"
+              :rules="[val => (val && val.length > 0) || $t('enterValidName')]"
+              lazy-rules
+            />
+          </div>
+          <div class="shpos-info-input">
+            <q-input
+              outlined
+              v-model="city"
+              :label="$t('city')"
+              :rules="[val => (val && val.length > 0) || $t('enterValidName')]"
+              lazy-rules
+            />
           </div>
           <div class="shpos-info-input">
             <q-select
@@ -66,11 +103,12 @@ export default Vue.extend({
     return {
       name: "",
       mobile: "",
+      code: "",
       address: "",
       city: "",
       regionID: "",
       latitude: "",
-      longitude: ""
+      longitude: "",
     };
   },
   methods: {
@@ -83,15 +121,17 @@ export default Vue.extend({
       try {
         const data = {
           name: this.name,
-          mobile: this.mobile,
+          mobile: "+964" + this.mobile.substr(1),
+          code: this.code,
           address: this.address,
           city: this.city,
           regionID: this.regionID,
           latitude: parseFloat(this.latitude),
-          longitude: parseFloat(this.longitude)
+          longitude: parseFloat(this.longitude),
+          role: "shop",
         };
         if (this.shop) {
-          await usersDB.doc(this.shop.docid).set(data);
+          await usersDB.doc(this.shop.docid).update(data);
         } else {
           await usersDB.add(data);
         }
@@ -99,20 +139,22 @@ export default Vue.extend({
         console.error(error);
       }
       this.$router.go(-1);
-    }
+    },
   },
 
   mounted() {
     if (this.shop) {
       this.name = this.shop.name;
-      this.mobile = this.shop.mobile;
+      this.mobile = this.shop.mobile.replace("+964", "0");
+      this.code = this.shop.code;
       this.address = this.shop.address;
       this.city = this.shop.city;
+      this.role = this.shop.role;
       this.regionID = this.shop.regionID;
       this.latitude = this.shop.latitude;
       this.longitude = this.shop.longitude;
     }
-  }
+  },
 });
 </script>
 <style>

@@ -1,53 +1,58 @@
 <template>
   <q-page id="page-show-region" class="column" :style-fn="styleFn">
     <q-card :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">
-      <q-card-section id="detail">
-        <div class="text-h6" id="page-title">{{$t('regionDetails')}}</div>
-        <div class="region-info text-subtitle2">
-          <div class="region-info-input">
-            <q-input
-              outlined
-              v-model="regionSend.name"
-              :rules="[val => (val && val.length > 0) || $t('enterValidName')]"
-              lazy-rules
-              :label="$t('name')"
-            />
+      <q-expansion-item
+        class="expantionLable"
+        :label="`${$t('regionDetails')}: ${regionSend.name}`"
+        v-model="oppened"
+      >
+        <q-card-section id="detail">
+          <div class="region-info text-subtitle2">
+            <div class="region-info-input">
+              <q-input
+                outlined
+                v-model="regionSend.name"
+                :rules="[val => (val && val.length > 0) || $t('enterValidName')]"
+                lazy-rules
+                :label="$t('name')"
+              />
+            </div>
+            <div class="region-info-input">
+              <q-input
+                outlined
+                v-model="regionSend.city"
+                :rules="[val => (val && val.length > 0) || $t('enterValidCity')]"
+                lazy-rules
+                :label="$t('city')"
+              />
+            </div>
+            <div class="region-info-input">
+              <q-input
+                outlined
+                v-model="regionSend.code"
+                :rules="[val => (val && val.length > 0) || $t('enterValidCode')]"
+                lazy-rules
+                :label="$t('code')"
+              />
+            </div>
           </div>
-          <div class="region-info-input">
-            <q-input
-              outlined
-              v-model="regionSend.city"
-              :rules="[val => (val && val.length > 0) || $t('enterValidCity')]"
-              lazy-rules
-              :label="$t('city')"
-            />
-          </div>
-          <div class="region-info-input">
-            <q-input
-              outlined
-              v-model="regionSend.code"
-              :rules="[val => (val && val.length > 0) || $t('enterValidCode')]"
-              lazy-rules
-              :label="$t('code')"
-            />
-          </div>
-        </div>
-      </q-card-section>
+        </q-card-section>
 
-      <q-card-actions id="control" class="row justify-center">
-        <q-btn color="secondary" @click="submit()" :label="$t('submit')" />
-        <q-btn
-          v-if="isRegionIndxExist()"
-          color="negative"
-          @click="confirm = true"
-          :label="$t('delete')"
-        />
-        <q-btn
-          color="warning"
-          @click="$router.push({ name: 'ShowRegions' });"
-          :label="$t('cancel')"
-        />
-      </q-card-actions>
+        <q-card-actions id="control" class="row justify-center">
+          <q-btn color="secondary" @click="submit()" :label="$t('submit')" />
+          <q-btn
+            v-if="isRegionIndxExist()"
+            color="negative"
+            @click="confirm = true"
+            :label="$t('delete')"
+          />
+          <q-btn
+            color="warning"
+            @click="$router.push({ name: 'ShowRegions' });"
+            :label="$t('cancel')"
+          />
+        </q-card-actions>
+      </q-expansion-item>
     </q-card>
 
     <div
@@ -118,6 +123,8 @@ export default Vue.extend({
   props: ["regionIndx"],
   data() {
     return {
+      oppened: !this.isRegionIndxExist(),
+
       regionSend: this.isRegionIndxExist()
         ? this.$store.state.regions[this.regionIndx]
         : { name: "", city: "", code: "" },
@@ -145,7 +152,6 @@ export default Vue.extend({
       }
     };
   },
-
   methods: {
     isRegionIndxExist() {
       return this.regionIndx !== null && this.regionIndx !== undefined;
@@ -189,6 +195,11 @@ export default Vue.extend({
 });
 </script>
 <style>
+.expantionLable {
+  font-size: 1.6em;
+  color: #105783;
+  text-align: center;
+}
 #page-show-region {
   padding: 20px;
 }

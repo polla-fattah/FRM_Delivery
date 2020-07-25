@@ -53,6 +53,10 @@ export default {
     yes: "بەڵێ",
     no: "نەخێر",
     areYouSureDelete: "بێگومانیت لە سڕینەوەی ئەو تۆمارە",
+    search: "گەڕان",
+    noShopFound: "هیچ دوکانێك نەدۆزراوە",
+    searchShop: "گەڕان لە دوکان"
+
 
 
 

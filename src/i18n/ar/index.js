@@ -53,5 +53,9 @@ export default {
     yes: "نعم",
     no: "کلا",
     areYouSureDelete: "هل انت متاكد نم حذف هذا القيد",
+    search: "بحث",
+    noShopFound: "لم يتم ايجاد ایة متجر",
+    searchShop: "بحث عن متجر",
+
 
 };

@@ -1,12 +1,15 @@
 <template>
   <q-page id="search-shops" class="column">
     <div class="fixed-center fixed-top" style="max-width: 650px; min-width:350px">
+      <div class="list-header">
+        <div id="page-title" :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">{{$t('searchShop')}}</div>
+      </div>
       <div class="q-gutter-md">
         <q-input
-          v-model="search"
+          v-model="code"
           debounce="500"
           filled
-          placeholder="Search"
+          :placeholder="$t('code')"
           @keypress.enter="submit()"
           @keydown="noResult = false"
         >
@@ -14,7 +17,25 @@
             <q-icon name="search"></q-icon>
           </template>
         </q-input>
-        <div v-if="noResult" id="noResult">{{$t('noResult')}}</div>
+        <q-input
+          v-model="mobile"
+          debounce="500"
+          filled
+          :placeholder="$t('mobile')"
+          @keypress.enter="submit()"
+          @keydown="noResult = false"
+          :rules="[
+                val =>
+                  (val && val.search(/^0[0-9]{10}$/) == 0) ||
+                  $t('enterValidMobile')
+              ]"
+          lazy-rules
+        >
+          <template v-slot:append>
+            <q-icon name="search"></q-icon>
+          </template>
+        </q-input>
+        <div v-if="noResult" id="noResult">{{$t('noShopFound')}}</div>
 
         <div style="text-align: center;">
           <q-btn color="secondary" @click="submit()" :label="$t('submit')" />
@@ -35,17 +56,23 @@ export default Vue.extend({
   name: "searchShop",
   data() {
     return {
-      search: "",
-      noResult: false
+      mobile: "",
+      code: "",
+      noResult: false,
     };
   },
   methods: {
     async submit() {
-      console.log(this.search);
       try {
-        let ref = usersDB
-          .where("role", "==", "shop")
-          .where("mobile", "==", this.search);
+        let ref = usersDB.where("role", "==", "shop");
+        if (this.mobile != "") {
+          const mobile = "+964" + this.mobile.substr(1);
+          console.log(mobile);
+          ref = ref.where("mobile", "==", mobile);
+        }
+        if (this.code != "") {
+          ref = ref.where("code", "==", this.code);
+        }
         const shops = await ref.get();
         if (shops.docs.length == 0) {
           this.noResult = true;
@@ -57,8 +84,8 @@ export default Vue.extend({
       } catch (err) {
         console.error(err);
       }
-    }
-  }
+    },
+  },
 });
 </script>
 <style>
