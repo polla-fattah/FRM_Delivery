@@ -1,75 +1,90 @@
 <template>
   <q-page id="prev-delivery" class="column" :style-fn="styleFn">
-    <q-card class="search-card bg-secondary text-white">
-      <div class="search-card-content">
-        <q-card-section class="search-card-element">
-          <q-input filled v-model="dateStart" mask="date" :label="$t('start')">
-            <template v-slot:append>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy ref="qDateProxyStart">
-                  <q-date
-                    class="fixed-center"
-                    v-model="dateStart"
-                    @input="() => $refs.qDateProxyStart.hide()"
-                  ></q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </q-card-section>
-        <q-card-section class="search-card-element">
-          <q-input filled v-model="dateEnd" mask="date" :label="$t('end')">
-            <template v-slot:append>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy ref="qDateProxyEnd">
-                  <q-date
-                    class="fixed-center"
-                    v-model="dateEnd"
-                    @input="() => $refs.qDateProxyEnd.hide()"
-                  ></q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </q-card-section>
-        <q-card-section v-if="$store.getters.isAdmin" class="search-card-element">
-          <q-select
-            filled
-            v-model="regionInp"
-            :options="$store.getters.getRegionsForSelect"
-            :label="$t('region')"
-            emit-value
-            map-options
-            outlined
-          />
-        </q-card-section>
-        <q-card-section v-if="$store.getters.isAdmin" class="search-card-element">
-          <q-select
-            filled
-            v-model="driverUserId"
-            :options="driversListForRegion"
-            :label="$t('driver')"
-            emit-value
-            map-options
-            outlined
-          />
-        </q-card-section>
-        <q-card-section
-          v-if="$store.getters.isAdmin ||  $store.getters.isDriver"
-          class="search-card-element"
-        >
-          <q-input v-model="shopMobileInp" label="Shop" />
-        </q-card-section>
-        <q-card-section class="search-card-element">
-          <q-input v-model="customerMobileInp" label="Reciver" />
-        </q-card-section>
-      </div>
-      <q-separator dark></q-separator>
+    <q-card class="search-card">
+      <q-expansion-item class="expantionLable" :label="$t('archive')" v-model="oppened">
+        <div class="search-card-content">
+          <q-card-section class="search-card-element">
+            <q-input filled v-model="dateStart" mask="date" :label="$t('start')">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxyStart">
+                    <q-date
+                      class="fixed-center"
+                      v-model="dateStart"
+                      @input="() => $refs.qDateProxyStart.hide()"
+                    ></q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </q-card-section>
+          <q-card-section class="search-card-element">
+            <q-input filled v-model="dateEnd" mask="date" :label="$t('end')">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxyEnd">
+                    <q-date
+                      class="fixed-center"
+                      v-model="dateEnd"
+                      @input="() => $refs.qDateProxyEnd.hide()"
+                    ></q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
+          </q-card-section>
+          <q-card-section v-if="$store.getters.isAdmin" class="search-card-element">
+            <q-select
+              filled
+              v-model="regionInp"
+              :options="$store.getters.getRegionsForSelect"
+              :label="$t('region')"
+              emit-value
+              map-options
+              outlined
+            />
+          </q-card-section>
+          <q-card-section v-if="$store.getters.isAdmin" class="search-card-element">
+            <q-select
+              filled
+              v-model="driverUserId"
+              :options="driversListForRegion"
+              :label="$t('driver')"
+              emit-value
+              map-options
+              outlined
+            />
+          </q-card-section>
+          <q-card-section
+            v-if="$store.getters.isAdmin ||  $store.getters.isDriver"
+            class="search-card-element"
+          >
+            <q-input filled v-model="shopMobileInp" :label="$t('shop')" />
+          </q-card-section>
+          <q-card-section class="search-card-element">
+            <q-input filled v-model="customerMobileInp" :label="$t('receiver')" />
+          </q-card-section>
+        </div>
 
-      <q-card-actions>
-        <q-btn @click="onSearch">Search</q-btn>
-        <q-btn @click="onClear">Clear</q-btn>
-      </q-card-actions>
+        <q-separator></q-separator>
+
+        <q-card-actions>
+          <div class="text-center" style="width:100%; color:black;">
+            <q-btn
+              color="secondary"
+              @click="onSearch"
+              style="margin:0px 3px;color:red"
+              text-color="yellow"
+            >{{$t('search')}}</q-btn>
+            <q-btn
+              color="warning"
+              @click="onClear"
+              style="margin:0px 3px;"
+              text-color="brown"
+            >{{$t('clear')}}</q-btn>
+          </div>
+        </q-card-actions>
+      </q-expansion-item>
     </q-card>
 
     <q-scroll-area
@@ -102,14 +117,22 @@
               <q-item-section>
                 <q-item-label lines="1" class="delivery-list-item-title">{{showTitle(item)}}</q-item-label>
                 <q-item-label caption lines="2">
-                  <span class="text-weight-bold">{{item.toAddress}} - {{item.docid}}</span>
+                  <span class="text-weight-bold">{{item.toAddress}}</span>
                 </q-item-label>
               </q-item-section>
             </q-item>
           </div>
         </template>
       </q-virtual-scroll>
-      <q-btn @click="onLoad" color="red">Load</q-btn>
+      <div v-if="showMore" class="text-center">
+        <q-btn
+          round
+          @click="onLoad"
+          color="secondary"
+          icon="navigation"
+          style="transform: rotate(180deg);"
+        ></q-btn>
+      </div>
     </q-scroll-area>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="arrow_back" color="secondary" @click="$router.go(-1)" />
@@ -128,8 +151,10 @@ export default Vue.extend({
 
   data() {
     return {
+      oppened: true,
       dataRef: null,
       dateStart: "",
+      showMore: false,
       dateEnd: "",
       driverUserId: "",
       customerMobileInp: "",
@@ -140,14 +165,14 @@ export default Vue.extend({
       rotating:
         this.$i18n.locale == "en-us" ? "" : "transform: rotate(180deg);",
       generalStyle: {
-        height: "650px"
+        height: "650px",
       },
       thumbStyle: {
         right: "3px",
         borderRadius: "4px",
         backgroundColor: "#0299e3",
         width: "8px",
-        opacity: 0.75
+        opacity: 0.75,
       },
 
       barStyle: {
@@ -158,8 +183,8 @@ export default Vue.extend({
         marginTop: "-3px",
         marginBottom: "-3px",
         paddingTop: "3px",
-        paddingBottom: "3px"
-      }
+        paddingBottom: "3px",
+      },
     };
   },
   computed: {
@@ -173,7 +198,7 @@ export default Vue.extend({
     },
     userInfo() {
       return this.$store.state.userInfo;
-    }
+    },
   },
 
   methods: {
@@ -188,18 +213,18 @@ export default Vue.extend({
       this.deliveryList = [];
     },
     onSearch() {
-      //TODO: Form Validation
-      console.log("Needs Form Validation");
       this.deliveryList = [];
+      this.oppened = false;
       this.fetchData();
     },
     async onLoad() {
       if (this.deliveryList && this.dataRef) {
         this.dataRef = this.dataRef.startAfter(this.lastDoc);
-
+        this.showMore = false;
         const querySnapshot = await this.dataRef.get();
         if (!querySnapshot.empty) {
-          querySnapshot.forEach(doc => {
+          this.showMore = true;
+          querySnapshot.forEach((doc) => {
             this.lastDoc = doc;
             this.deliveryList.push({ ...doc.data(), docid: doc.id });
           });
@@ -210,6 +235,7 @@ export default Vue.extend({
       return this.$store.getters.isShop ? item.toName : item.fromName;
     },
     async fetchData() {
+      this.showMore = false;
       let that = this;
       let ref = deliveryDB;
       // Select the right user
@@ -261,7 +287,8 @@ export default Vue.extend({
       const querySnapshot = await ref.get();
       console.log(querySnapshot.empty);
       if (!querySnapshot.empty) {
-        querySnapshot.forEach(function(doc) {
+        this.showMore = true;
+        querySnapshot.forEach(function (doc) {
           that.lastDoc = doc;
           that.deliveryList.push({ ...doc.data(), docid: doc.id });
         });
@@ -271,36 +298,40 @@ export default Vue.extend({
     routing(delivery) {
       this.$router.push({
         name: "ShowDelivery",
-        params: { delivery, fromArchive: true }
+        params: { delivery, fromArchive: true },
       });
     },
     styleFn(offset, height) {
-      let pageheight = height - offset - 10;
+      let pageheight = height - offset - 500;
       this.generalStyle = {
-        height: pageheight + "px"
+        height: pageheight + "px",
       };
-    }
-  }
+    },
+  },
 });
 </script>
 <style>
+#prev-delivery {
+  padding: 20px;
+}
 .search-card-content {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
   align-content: center;
 }
 .search-card-element {
-  min-width: 250px;
-  min-width: 250px;
-  margin: 0px;
+  max-width: 370px;
+  min-width: 270px;
+  margin: 2px;
   padding: 0px;
 }
 .search-card-element .q-field {
-  margin: 0px;
-  padding: 0px;
+  max-width: 370px;
+  min-width: 300px;
 }
 .search-card {
+  margin-bottom: 10px;
   width: 100%;
 }
 #page-delivery {
@@ -310,5 +341,10 @@ export default Vue.extend({
 .polla {
   margin: auto 1.5em;
   display: inline-block;
+}
+.expantionLable {
+  font-size: 1.6em;
+  color: #105783;
+  text-align: center;
 }
 </style>

@@ -7,6 +7,7 @@ export default {
     delivery: "Delivery",
     archive: "Archive",
     edit_shops: "Shops",
+    shop: "Shop",
     edit_regions: "Cars",
     sharing: "Sharing",
     logout: "Logout",
@@ -55,7 +56,11 @@ export default {
     areYouSureDelete: "Are you sure that you want to delete this item",
     search: "Search",
     noShopFound: "No Shop has Found",
-    searchShop: "Search for a Shop"
+    searchShop: "Search for a Shop",
+    more: "More",
+    clear: "Clear",
+    receiver: "Receiver",
+
 
 
 

@@ -130,14 +130,14 @@ export default Vue.extend({
         : { name: "", city: "", code: "" },
       confirm: false,
       generalStyle: {
-        height: "650px"
+        height: "650px",
       },
       thumbStyle: {
         right: "3px",
         borderRadius: "4px",
         backgroundColor: "#0299e3",
         width: "8px",
-        opacity: 0.75
+        opacity: 0.75,
       },
 
       barStyle: {
@@ -148,8 +148,8 @@ export default Vue.extend({
         marginTop: "-3px",
         marginBottom: "-3px",
         paddingTop: "3px",
-        paddingBottom: "3px"
-      }
+        paddingBottom: "3px",
+      },
     };
   },
   methods: {
@@ -159,13 +159,13 @@ export default Vue.extend({
     styleFn(offset, height) {
       let pageheight = height - offset - 500;
       this.generalStyle = {
-        height: pageheight + "px"
+        height: pageheight + "px",
       };
     },
     editDriver(_driver) {
       this.$router.push({
         name: "EditDriver",
-        params: { driver: _driver, regionIndx: this.regionIndx }
+        params: { driver: _driver, regionIndx: this.regionIndx },
       });
     },
     async deleteRegion() {
@@ -190,8 +190,8 @@ export default Vue.extend({
         console.error(error);
       }
       this.$router.push({ name: "ShowRegions" });
-    }
-  }
+    },
+  },
 });
 </script>
 <style>

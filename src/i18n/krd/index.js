@@ -7,6 +7,8 @@ export default {
     delivery: "گەیاندن",
     archive: "ئەرشیف",
     edit_shops: "دوکانەکان",
+    shop: "دوکان",
+
     edit_regions: "شۆفێرەکان",
     sharing: "بەشکردن",
     logout: "دەرچوون",
@@ -55,7 +57,13 @@ export default {
     areYouSureDelete: "بێگومانیت لە سڕینەوەی ئەو تۆمارە",
     search: "گەڕان",
     noShopFound: "هیچ دوکانێك نەدۆزراوە",
-    searchShop: "گەڕان لە دوکان"
+    searchShop: "گەڕان لە دوکان",
+    more: "زیاتر",
+    clear: "خاوێنی بکەوە",
+    receiver: "وەرگر",
+
+
+
 
 
 

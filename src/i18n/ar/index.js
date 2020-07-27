@@ -7,6 +7,8 @@ export default {
     delivery: "التوصيل",
     archive: "الارشیف",
     edit_shops: "المتاجر",
+    shop: "متجر",
+
     edit_regions: "سیارات",
     sharing: "المشاركة",
     logout: "الخروج",
@@ -56,6 +58,10 @@ export default {
     search: "بحث",
     noShopFound: "لم يتم ايجاد ایة متجر",
     searchShop: "بحث عن متجر",
+    more: "اکثر",
+    clear: "امسح",
+    receiver: "المستلم",
+
 
 
 };

@@ -69,7 +69,7 @@
         />
       </q-card-actions>
     </q-card>
-    <div ref="maps_canvas" id="map_canvas" style="width: 100%; height: 500px;"></div>
+    <div v-if="!fromArchive" ref="maps_canvas" id="map_canvas" style="width: 100%; height: 500px;"></div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="arrow_back" color="dark" @click="$router.go(-1)" />
     </q-page-sticky>
@@ -102,7 +102,7 @@ export default Vue.extend({
   data() {
     return {
       alert: false,
-      alertMsg: ""
+      alertMsg: "",
     };
   },
   async mounted() {
@@ -115,28 +115,28 @@ export default Vue.extend({
       const map = new google.maps.Map(this.$refs.maps_canvas, {
         center: { lat: 36.1909883, lng: 44.0068523 },
         zoom: 12,
-        mapTypeId: "roadmap"
+        mapTypeId: "roadmap",
       });
       directionsDisplay.setMap(map);
 
-      const markerClickHandler = marker => {
+      const markerClickHandler = (marker) => {
         map.setZoom(13);
         map.setCenter(marker.getPosition());
       };
       console.log({
         lat: this.delivery.fromLat,
-        lng: this.delivery.fromLong
+        lng: this.delivery.fromLong,
       });
       directionsService.route(
         {
           origin: { lat: latlng.lat, lng: latlng.lng },
           destination: {
             lat: this.delivery.fromLat,
-            lng: this.delivery.fromLong
+            lng: this.delivery.fromLong,
           },
-          travelMode: "DRIVING"
+          travelMode: "DRIVING",
         },
-        function(response, status) {
+        function (response, status) {
           if (status == google.maps.DirectionsStatus.OK) {
             directionsDisplay.setDirections(response);
           } else {
@@ -150,9 +150,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    user: function() {
+    user: function () {
       return this.$user;
-    }
+    },
   },
   methods: {
     picked() {
@@ -174,8 +174,8 @@ export default Vue.extend({
       let data = { ...this.delivery };
       delete data.id;
       deliveryDB.doc(this.delivery.id).set(data);
-    }
-  }
+    },
+  },
 });
 </script>
 <style>
