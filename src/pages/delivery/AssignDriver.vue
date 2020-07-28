@@ -1,6 +1,6 @@
 <template>
   <q-page id="page-show-delivery" class="column" :style-fn="styleFn">
-    <q-card :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'">
+    <q-card>
       <q-card-section id="detail">
         <div style="color:#105783;" class="text-h4 text-center">{{ $t("delivery_details") }}</div>
         <div class="delivery-info text-subtitle2">
@@ -58,7 +58,6 @@
       v-if="delivery.status == 50"
       style="color:#105783;"
       class="text-h4 text-center"
-      :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'"
     >{{ $t("drivers") }}</div>
     <q-scroll-area
       v-if="delivery.status == 50"
@@ -67,7 +66,6 @@
       id="scroll-area-with-virtual-scroll-1"
       :style="generalStyle"
       class="fill-window"
-      :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'"
     >
       <q-virtual-scroll
         scroll-target="#scroll-area-with-virtual-scroll-1 > .scroll"
@@ -113,14 +111,14 @@ export default Vue.extend({
     return {
       seq: 1,
       generalStyle: {
-        height: "450px"
+        height: "450px",
       },
       thumbStyle: {
         right: "3px",
         borderRadius: "4px",
         backgroundColor: "#0299e3",
         width: "8px",
-        opacity: 0.75
+        opacity: 0.75,
       },
 
       barStyle: {
@@ -131,23 +129,23 @@ export default Vue.extend({
         marginTop: "-3px",
         marginBottom: "-3px",
         paddingTop: "3px",
-        paddingBottom: "3px"
-      }
+        paddingBottom: "3px",
+      },
     };
   },
 
   computed: {
-    user: function() {
+    user: function () {
       return this.$user;
     },
     driversList() {
       const dRegion = this.delivery.regionID;
-      const filter = e => e.docid.trim() == dRegion.trim();
+      const filter = (e) => e.docid.trim() == dRegion.trim();
 
       const region = this.$store.state.regions.find(filter);
       console.log(region.drivers);
       return region.drivers;
-    }
+    },
   },
   methods: {
     back() {
@@ -163,7 +161,7 @@ export default Vue.extend({
         await deliveryDB.doc(this.delivery.id).update({
           driverID: item.userId,
           driverName: item.name,
-          status: 40
+          status: 40,
         }); //item.id
       } catch (error) {
         console.error(error);
@@ -173,10 +171,10 @@ export default Vue.extend({
     styleFn(offset, height) {
       let pageheight = height - offset - 430;
       this.generalStyle = {
-        height: pageheight + "px"
+        height: pageheight + "px",
       };
-    }
-  }
+    },
+  },
 });
 </script>
 <style>

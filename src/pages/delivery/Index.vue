@@ -2,7 +2,7 @@
   <q-page id="page-delivery" class="column" :style-fn="styleFn">
     <q-list>
       <q-item-section class="list-header">
-        <div id="page-title" :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">{{$t('delivery')}}</div>
+        <div id="page-title">{{$t('delivery')}}</div>
       </q-item-section>
 
       <q-item-section id="delivery-noresult-container" v-if="deliveryList.length == 0">
@@ -25,12 +25,7 @@
         >
           <template v-slot="{item}">
             <div class="delivery-list-item">
-              <q-item
-                clickable
-                v-ripple
-                @click="routing(item)"
-                :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'"
-              >
+              <q-item clickable v-ripple @click="routing(item)">
                 <q-item-section avatar>
                   <q-avatar>
                     <q-icon name="double_arrow" size="2.5rem" :style="rotating(item.status)" />
@@ -73,14 +68,14 @@ export default Vue.extend({
       deliveryList: [],
 
       generalStyle: {
-        height: "650px"
+        height: "650px",
       },
       thumbStyle: {
         right: "3px",
         borderRadius: "4px",
         backgroundColor: "#0299e3",
         width: "8px",
-        opacity: 0.75
+        opacity: 0.75,
       },
 
       barStyle: {
@@ -91,14 +86,14 @@ export default Vue.extend({
         marginTop: "-3px",
         marginBottom: "-3px",
         paddingTop: "3px",
-        paddingBottom: "3px"
-      }
+        paddingBottom: "3px",
+      },
     };
   },
   computed: {
     userInfo() {
       return this.$store.state.userInfo;
-    }
+    },
   },
   watch: {
     deliveryList(val) {},
@@ -106,7 +101,7 @@ export default Vue.extend({
       if (val && !this.dataFetched) {
         this.fetchData();
       }
-    }
+    },
   },
   methods: {
     rotating(status) {
@@ -114,7 +109,7 @@ export default Vue.extend({
         transform:
           this.$i18n.locale == "en-us" ? "rotate(0deg)" : "rotate(180deg)",
         color:
-          status == 50 ? "moccasin" : status == 40 ? "lime" : "DarkSlateBlue"
+          status == 50 ? "moccasin" : status == 40 ? "lime" : "DarkSlateBlue",
       };
     },
     showTitle(item) {
@@ -152,30 +147,30 @@ export default Vue.extend({
         ref = ref.where("status", ">", 11);
       }
 
-      ref.onSnapshot(function(querySnapshot) {
-        querySnapshot.docChanges().forEach(function(change) {
+      ref.onSnapshot(function (querySnapshot) {
+        querySnapshot.docChanges().forEach(function (change) {
           if (change.type === "added") {
             that.deliveryList.push({
               ...change.doc.data(),
               id: change.doc.id,
-              key: that.seq
+              key: that.seq,
             });
             that.seq++;
           }
           if (change.type === "modified") {
-            const condition = element => {
+            const condition = (element) => {
               return element.id === change.doc.id;
             };
             const indx = that.deliveryList.findIndex(condition);
             that.deliveryList[indx] = {
               ...change.doc.data(),
               id: change.doc.id,
-              key: that.seq
+              key: that.seq,
             };
             that.seq++;
           }
           if (change.type === "removed") {
-            that.deliveryList = that.deliveryList.filter(function(element) {
+            that.deliveryList = that.deliveryList.filter(function (element) {
               return element.id !== change.doc.id;
             });
           }
@@ -186,7 +181,7 @@ export default Vue.extend({
       if (this.$store.getters.isShop)
         this.$router.push({
           name: "EditDelivery",
-          params: { delivery: null, role: this.$store.getters.getRole }
+          params: { delivery: null, role: this.$store.getters.getRole },
         });
     },
     routing(delivery) {
@@ -195,7 +190,7 @@ export default Vue.extend({
       else if (this.$store.getters.isShop)
         this.$router.push({
           name: "EditDelivery",
-          params: { delivery: delivery, role: this.$store.getters.getRole }
+          params: { delivery: delivery, role: this.$store.getters.getRole },
         });
       else if (this.$store.getters.isAdmin)
         this.$router.push({ name: "AssignDriver", params: { delivery } });
@@ -203,10 +198,10 @@ export default Vue.extend({
     styleFn(offset, height) {
       let pageheight = height - offset - 50;
       this.generalStyle = {
-        height: pageheight + "px"
+        height: pageheight + "px",
       };
-    }
-  }
+    },
+  },
 });
 </script>
 <style>

@@ -1,8 +1,8 @@
 <template>
   <q-page id="page-region" class="column" :style-fn="styleFn">
-    <q-list :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">
+    <q-list>
       <q-item-section class="list-header">
-        <div id="page-title" :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">{{$t('region')}}</div>
+        <div id="page-title">{{$t('region')}}</div>
       </q-item-section>
 
       <q-scroll-area
@@ -53,14 +53,14 @@ export default Vue.extend({
   data() {
     return {
       generalStyle: {
-        height: "650px"
+        height: "650px",
       },
       thumbStyle: {
         right: "3px",
         borderRadius: "4px",
         backgroundColor: "#0299e3",
         width: "8px",
-        opacity: 0.75
+        opacity: 0.75,
       },
 
       barStyle: {
@@ -71,27 +71,27 @@ export default Vue.extend({
         marginTop: "-3px",
         marginBottom: "-3px",
         paddingTop: "3px",
-        paddingBottom: "3px"
-      }
+        paddingBottom: "3px",
+      },
     };
   },
   computed: {
     regions() {
       return this.$store.getters.getRegions;
-    }
+    },
   },
   methods: {
     rotating(status) {
       return {
         transform:
           this.$i18n.locale == "en-us" ? "rotate(0deg)" : "rotate(180deg)",
-        color: "#26A69A"
+        color: "#26A69A",
       };
     },
     goToAddTask() {
       this.$router.push({
         name: "EditRegion",
-        params: { regionIndx: null }
+        params: { regionIndx: null },
       });
     },
     routing(regionIndx) {
@@ -100,10 +100,10 @@ export default Vue.extend({
     styleFn(offset, height) {
       let pageheight = height - offset - 60;
       this.generalStyle = {
-        height: pageheight + "px"
+        height: pageheight + "px",
       };
-    }
-  }
+    },
+  },
 });
 </script>
 <style>

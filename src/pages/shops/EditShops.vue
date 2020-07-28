@@ -1,7 +1,7 @@
 <template>
   <q-page id="page-edit-shops" class="column">
     <q-card>
-      <q-card-section id="detail" :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">
+      <q-card-section id="detail">
         <div class="text-h6">{{$t('shop_details')}}</div>
         <div class="shpos-info text-subtitle2">
           <div class="shpos-info-input">

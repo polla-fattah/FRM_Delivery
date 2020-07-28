@@ -1,6 +1,6 @@
 <template>
   <q-page id="page-show-driver" class="column">
-    <q-card :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">
+    <q-card>
       <q-card-section id="detail">
         <div style="color:#105783;" class="text-h4 text-center">{{$t('driverDetail')}}</div>
         <div class="driver-info text-subtitle2">
@@ -85,7 +85,7 @@ export default Vue.extend({
   computed: {
     region() {
       return this.$store.state.regions[this.regionIndx];
-    }
+    },
   },
   methods: {
     fixMobile() {
@@ -96,12 +96,14 @@ export default Vue.extend({
         const data = { ...this.region };
         delete data.docid;
         delete data.id;
-        data.drivers = data.drivers.filter(e => e.userId != this.driver.userId);
+        data.drivers = data.drivers.filter(
+          (e) => e.userId != this.driver.userId
+        );
         console.log(this.region.docid);
         await regionsDB.doc(this.region.docid).set(data);
         this.$store.commit("updateRegion", {
           data,
-          docid: this.region.docid
+          docid: this.region.docid,
         });
       } catch (error) {
         console.error(error);
@@ -135,7 +137,7 @@ export default Vue.extend({
     goBack() {
       this.$router.push({
         name: "EditRegion",
-        params: { regionIndx: this.regionIndx }
+        params: { regionIndx: this.regionIndx },
       });
     },
     async submit() {
@@ -151,7 +153,7 @@ export default Vue.extend({
 
       try {
         if (this.driver) {
-          const condition = e => e.userId == this.driver.userId;
+          const condition = (e) => e.userId == this.driver.userId;
           const indx = data.drivers.findIndex(condition);
           if (data.drivers[indx].mobile != this.driverSend.mobile) {
             const driverID = await this.getDriverId(this.driverSend.mobile);
@@ -160,27 +162,27 @@ export default Vue.extend({
           data.drivers[indx] = this.driverSend;
         } else {
           const driverID = await this.getDriverId(this.driverSend.mobile);
-          const condition = e => e.mobile == this.driverSend.mobile;
+          const condition = (e) => e.mobile == this.driverSend.mobile;
           const indx = data.drivers.findIndex(condition);
           if (indx == -1)
             data.drivers.push({
               ...this.driverSend,
               userId: driverID,
-              jobs: 0
+              jobs: 0,
             });
           else data.drivers[indx] = { ...this.driverSend, userId: driverID };
         }
         await regionsDB.doc(this.region.docid).set(data);
         this.$store.commit("updateRegion", {
           data,
-          docid: this.region.docid
+          docid: this.region.docid,
         });
       } catch (error) {
         console.error("Can not update drivers", error);
       }
       this.goBack();
-    }
-  }
+    },
+  },
 });
 </script>
 <style>

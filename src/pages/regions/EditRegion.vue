@@ -1,6 +1,6 @@
 <template>
   <q-page id="page-show-region" class="column" :style-fn="styleFn">
-    <q-card :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">
+    <q-card>
       <q-expansion-item
         class="expantionLable"
         :label="`${$t('regionDetails')}: ${regionSend.name}`"

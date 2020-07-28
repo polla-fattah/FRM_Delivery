@@ -2,7 +2,7 @@
   <q-page id="search-shops" class="column">
     <div class="fixed-center fixed-top" style="max-width: 650px; min-width:350px">
       <div class="list-header">
-        <div id="page-title" :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'">{{$t('searchShop')}}</div>
+        <div id="page-title">{{$t('searchShop')}}</div>
       </div>
       <div class="q-gutter-md">
         <q-input

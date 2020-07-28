@@ -102,7 +102,7 @@ export default {
             ? "green"
             : "gray",
         padding: "0px 0px 0px 30px",
-        fontSize: "0.8em"
+        fontSize: "0.8em",
       },
       links: [
         {
@@ -110,7 +110,7 @@ export default {
           text: this.$t("delivery"),
           type: "link",
           url: "Delivery",
-          level: ["driver", "shop", "admin"]
+          level: ["driver", "shop", "admin"],
         },
 
         {
@@ -118,51 +118,51 @@ export default {
           text: this.$t("archive"),
           type: "link",
           url: "PrevDelivery",
-          level: ["driver", "shop", "admin"]
+          level: ["driver", "shop", "admin"],
         },
         {
           icon: "article",
           text: this.$t("stat"),
           type: "link",
           url: "StatIndex",
-          level: ["admin"]
+          level: ["admin"],
         },
         {
           icon: "store",
           text: this.$t("edit_shops"),
           type: "link",
           url: "SearchShops",
-          level: ["driver", "admin"]
+          level: ["driver", "admin"],
         },
         {
           icon: "local_shipping",
           text: this.$t("edit_regions"),
           type: "link",
           url: "ShowRegions",
-          level: ["admin"]
+          level: ["admin"],
         },
         {
           icon: "people",
           text: this.$t("sharing"),
           type: "method",
           url: "addRole",
-          level: ["none"]
+          level: ["none"],
         },
         {
           icon: "power_settings_new",
           text: this.$t("logout"),
           type: "method",
           url: "logout",
-          level: ["driver", "shop", "admin"]
+          level: ["driver", "shop", "admin"],
         },
         {
           icon: "language",
           text: this.$t("language"),
           type: "method",
           url: "openDrawer",
-          level: ["driver", "shop", "admin"]
-        }
-      ]
+          level: ["driver", "shop", "admin"],
+        },
+      ],
     };
   },
   methods: {
@@ -190,8 +190,8 @@ export default {
       this.$store.commit("setUser", null);
       this.$store.commit("setClaims", null);
       this.$router.push("/");
-    }
-  }
+    },
+  },
 };
 </script>
 

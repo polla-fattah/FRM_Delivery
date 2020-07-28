@@ -102,12 +102,7 @@
       >
         <template v-slot="{item}">
           <div class="delivery-list-item">
-            <q-item
-              clickable
-              v-ripple
-              @click="routing(item)"
-              :dir="$i18n.locale === 'en-us' ?'ltr':'rtl'"
-            >
+            <q-item clickable v-ripple @click="routing(item)">
               <q-item-section avatar>
                 <q-avatar>
                   <q-icon name="double_arrow" size="2.5rem" :style="rotating" />

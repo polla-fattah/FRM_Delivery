@@ -1,6 +1,6 @@
 <template>
   <q-page id="stat_element" class="column">
-    <q-card :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'">
+    <q-card>
       <q-card-section id="detail">
         <div
           style="color:#105783;"

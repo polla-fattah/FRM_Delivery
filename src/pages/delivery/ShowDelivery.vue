@@ -1,6 +1,6 @@
 <template>
   <q-page id="page-show-delivery" class="column">
-    <q-card :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'">
+    <q-card>
       <q-card-section id="detail">
         <div style="color:#105783;" class="text-h4 text-center">{{ $t("delivery_details") }}</div>
         <div class="delivery-info text-subtitle2">

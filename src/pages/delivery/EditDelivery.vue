@@ -1,7 +1,7 @@
 <template>
   <q-page id="page-show-delivery" class="column">
     <q-card>
-      <q-card-section id="detail" :dir="$i18n.locale === 'en-us' ? 'ltr' : 'rtl'">
+      <q-card-section id="detail">
         <div class="text-h6">{{ $t("delivery_details") }}</div>
         <div class="delivery-info text-subtitle2">
           <div class="delivery-info-input">
