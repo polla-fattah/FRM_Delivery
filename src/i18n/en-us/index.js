@@ -50,6 +50,7 @@ export default {
     enterValidCity: "Enter a Valid City",
     enterValidCode: "Enter a Valid Code",
     enterValidCar: "Enter a Valid Car",
+    enterValidDate: "Enter a Valid Date",
     car: "Car",
     yes: "Yes",
     no: "No",
@@ -60,9 +61,11 @@ export default {
     more: "More",
     clear: "Clear",
     receiver: "Receiver",
-
-
-
-
-
+    shop_stat: "Shop Statistic",
+    driver_stat: "Driver Statistic",
+    type: "Type",
+    date: "Date",
+    daily: "Daily",
+    monthly: "Monthly",
+    requested: "Requested",
 };

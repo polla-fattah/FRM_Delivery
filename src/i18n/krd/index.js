@@ -51,6 +51,7 @@ export default {
     enterValidCity: "بە ناوی شارێکی دروست پڕبکەوە",
     enterValidCode: "بە کۆدێکی دروست پڕبکەوە",
     enterValidCar: "بە سەیارەیەکی دروست پڕبکەوە",
+    enterValidDate: "بە بەروارێکی دروست پڕبکەوە",
     car: "سەیارە",
     yes: "بەڵێ",
     no: "نەخێر",
@@ -61,7 +62,13 @@ export default {
     more: "زیاتر",
     clear: "خاوێنی بکەوە",
     receiver: "وەرگر",
-
+    shop_stat: "ژمێریاری دوکان",
+    driver_stat: "ژمێریاری شۆفێر",
+    type: "جۆر",
+    date: "بەروار",
+    daily: "رۆژانە",
+    monthly: "مانگەنە",
+    requested: "داواکراو",
 
 
 

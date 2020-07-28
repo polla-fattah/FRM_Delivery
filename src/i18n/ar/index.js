@@ -51,6 +51,8 @@ export default {
     enterValidCity: "ادخل اسم مدينة صحيحة",
     enterValidCode: "ادخل کودا صحيحا",
     enterValidCar: "ادخل سيارة صحيحة",
+    enterValidDate: "ادخل تاريخا صحيحا",
+
     car: "سيارة",
     yes: "نعم",
     no: "کلا",
@@ -61,7 +63,13 @@ export default {
     more: "اکثر",
     clear: "امسح",
     receiver: "المستلم",
-
+    shop_stat: "احصاء المحل",
+    driver_stat: "احصاء السائق",
+    type: "نوع",
+    date: "تاریخ",
+    daily: "يومي",
+    monthly: "شهري",
+    requested: "الطلب",
 
 
 };

@@ -5,6 +5,7 @@
         <div class="stat-card-content">
           <div class="first-row">
             <q-card-section class="search-card-element">
+              <!--  -->
               <q-btn-toggle
                 v-model="userType"
                 toggle-color="secondary"
@@ -31,6 +32,7 @@
             <q-card-section class="search-card-element">
               <q-btn-toggle
                 v-model="recordType"
+                @change="val => { statList = [] }"
                 toggle-color="secondary"
                 :options="[
           {label: 'Daily', value: 'daily', slot: 'daily'},
@@ -54,8 +56,15 @@
             </q-card-section>
           </div>
           <div class="second-row">
-            <q-card-section class="search-card-element">
-              <q-input filled v-model="dateSelected" mask="date">
+            <q-card-section class="search-card-element" style="margin-bottom:20px;">
+              <q-input
+                ref="theDate"
+                :rules="[val => (val && val.length > 0) || $t('enterValidDate')]"
+                lazy-rules
+                filled
+                v-model="dateSelected"
+                mask="date"
+              >
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy ref="qDateProxyEnd">
@@ -103,6 +112,12 @@
             >
               <q-input filled v-model="shopMobileInp" :label="$t('shop')" />
             </q-card-section>
+            <q-card-section
+              v-if="($store.getters.isAdmin ||  $store.getters.isDriver)  && userType == 'shop'"
+              class="search-card-element"
+            >
+              <q-input filled v-model="shopCodeInp" :label="$t('code')" />
+            </q-card-section>
           </div>
         </div>
         <q-separator dark></q-separator>
@@ -135,7 +150,7 @@
     >
       <q-virtual-scroll
         scroll-target="#scroll-area-with-virtual-scroll-1 > .scroll"
-        :items="deliveryList"
+        :items="statList"
         :virtual-scroll-item-size="32"
         class="col"
       >
@@ -154,9 +169,12 @@
               </q-item-section>
 
               <q-item-section>
-                <q-item-label lines="1" class="delivery-list-item-title">{{showTitle(item)}}</q-item-label>
-                <q-item-label caption lines="2">
-                  <span class="text-weight-bold">{{item.toAddress}} - {{item.docid}}</span>
+                <q-item-label lines="1" class="delivery-list-item-title">{{item.name}}</q-item-label>
+                <q-item-label v-if="item.userType == 'shop'" caption lines="2">
+                  <span class="text-weight-bold">{{item.requested}} - {{item.returned}}</span>
+                </q-item-label>
+                <q-item-label v-else caption lines="2">
+                  <span class="text-weight-bold">{{item.picked}} - {{item.delivered}}</span>
                 </q-item-label>
               </q-item-section>
             </q-item>
@@ -201,9 +219,10 @@ export default Vue.extend({
       dateSelected: "",
       driverUserId: "",
       shopMobileInp: "",
+      shopCodeInp: "",
       regionInp: "",
       lastDoc: null,
-      deliveryList: [],
+      statList: [],
       rotating:
         this.$i18n.locale == "en-us" ? "" : "transform: rotate(180deg);",
       generalStyle: {
@@ -251,6 +270,14 @@ export default Vue.extend({
         height: pageheight + "px",
       };
     },
+    userType() {
+      this.statList = [];
+      this.dataRef = null;
+    },
+    recordType() {
+      this.statList = [];
+      this.dataRef = null;
+    },
   },
   methods: {
     onClear() {
@@ -259,30 +286,26 @@ export default Vue.extend({
       this.driverUserId = "";
       this.shopMobileInp = "";
       this.regionInp = "";
-      this.deliveryList = [];
+      this.statList = [];
     },
     onSearch() {
-      //TODO: Form Validation
-      console.log("Needs Form Validation");
-      this.deliveryList = [];
+      if (!this.$refs.theDate.validate()) return;
+      this.statList = [];
       this.oppened = false;
       this.fetchData();
     },
     async onLoad() {
-      if (this.deliveryList && this.dataRef) {
+      if (this.statList && this.dataRef) {
         this.dataRef = this.dataRef.startAfter(this.lastDoc);
 
         const querySnapshot = await this.dataRef.get();
         if (!querySnapshot.empty) {
           querySnapshot.forEach((doc) => {
             this.lastDoc = doc;
-            this.deliveryList.push({ ...doc.data(), docid: doc.id });
+            this.statList.push({ ...doc.data(), docid: doc.id });
           });
         }
       }
-    },
-    showTitle(item) {
-      return this.$store.getters.isShop ? item.toName : item.fromName;
     },
     async fetchData() {
       const that = this;
@@ -323,16 +346,13 @@ export default Vue.extend({
       if (!querySnapshot.empty) {
         querySnapshot.forEach(function (doc) {
           that.lastDoc = doc;
-          that.deliveryList.push({ ...doc.data(), docid: doc.id });
+          that.statList.push({ ...doc.data(), docid: doc.id });
         });
       }
     },
 
-    routing(delivery) {
-      this.$router.push({
-        name: "ShowDelivery",
-        params: { delivery, fromArchive: true },
-      });
+    routing(stat) {
+      this.$router.push({ name: "StatElement", params: { stat } });
     },
     styleFn(offset, height) {
       this.height = height;

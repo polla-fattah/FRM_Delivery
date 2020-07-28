@@ -40,7 +40,7 @@ exports.updateStat = functions.firestore
         const driverObj = {
             userType: "driver",
             userID: a.driverID,
-            driverName: driverData.name ? driverData.name : "",
+            name: driverData.name ? driverData.name : "",
             theDate: timestamp,
             strYear: year,
             strMonth: month,
@@ -49,7 +49,7 @@ exports.updateStat = functions.firestore
         const shopObj = {
             userType: "shop",
             userID: a.fromId,
-            shopName: a.fromName,
+            name: a.fromName,
             theDate: timestamp,
             strYear: year,
             strMonth: month,

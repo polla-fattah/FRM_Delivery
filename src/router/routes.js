@@ -115,8 +115,16 @@ const routes = [{
             name: 'StatIndex',
             props: true,
             component: () => import('pages/stats/Index.vue'),
-            beforeEnter: defaultGaurd
-        }
+            beforeEnter: adminGuard
+        },
+        {
+            path: 'stat_element',
+            name: 'StatElement',
+            props: true,
+            component: () => import('pages/stats/StatElement.vue'),
+            beforeEnter: adminGuard
+        },
+
     ]
 }]
 
