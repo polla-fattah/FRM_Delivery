@@ -6,14 +6,7 @@
           <div class="first-row">
             <q-card-section class="search-card-element">
               <!--  -->
-              <q-btn-toggle
-                v-model="userType"
-                toggle-color="secondary"
-                :options="[
-          {label: 'Driver', value: 'driver', slot: 'driver'},
-          {label: 'Shop', value: 'shop', slot: 'shop'}
-        ]"
-              >
+              <q-btn-toggle v-model="userType" toggle-color="secondary" :options="userTypeOpt">
                 <template v-slot:driver>
                   <div class="row items-center no-wrap">
                     <div class="text-center"></div>
@@ -34,10 +27,7 @@
                 v-model="recordType"
                 @change="val => { statList = [] }"
                 toggle-color="secondary"
-                :options="[
-          {label: 'Daily', value: 'daily', slot: 'daily'},
-          {label: 'Monthly', value: 'monthly', slot: 'monthly'}
-        ]"
+                :options="recordTypeOpt"
               >
                 <template v-slot:daily>
                   <div class="row items-center no-wrap">
@@ -204,6 +194,14 @@ export default Vue.extend({
 
   data() {
     return {
+      recordTypeOpt: [
+        { label: this.$t("daily"), value: "daily", slot: "daily" },
+        { label: this.$t("monthly"), value: "monthly", slot: "monthly" },
+      ],
+      userTypeOpt: [
+        { label: this.$t("driver"), value: "driver", slot: "driver" },
+        { label: this.$t("shop"), value: "shop", slot: "shop" },
+      ],
       oppened: true,
       showMore: false,
       offset: 0,
