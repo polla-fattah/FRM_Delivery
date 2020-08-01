@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { auth, usersDB, messaging } from "src/firebase/init.js";
+import { auth, usersDB, firebase } from "src/firebase/init.js";
 import Vue from "vue";
 
 export default {
@@ -26,14 +26,18 @@ export default {
           ) {
             await that.$store.dispatch("loadRegions");
             await that.$store.dispatch("loadPosition", { isMobile });
-            messaging.onTokenRefresh(that.handleToken());
-            messaging.onMessage((payload) => {
-              console.log('Message received. ', payload);
-            });
-            messaging.requestPermission()
-            .then(that.handleToken())
-            .catch(err => console.error("Token Error", err));
+            if (!isMobile) {
+              firebase.messaging.onTokenRefresh(that.handleToken());
+              firebase.messaging.onMessage(payload => {
+                console.log("Message received. ", payload);
+              });
+              firebase.messaging
+                .requestPermission()
+                .then(that.handleToken())
+                .catch(err => console.error("Token Error", err));
+            }
           }
+
           that.$router.push("/delivery");
         } catch (err) {
           console.error(err);
@@ -46,8 +50,7 @@ export default {
   },
   methods: {
     handleToken() {
-      console.log("handleToken");
-      return messaging.getToken().then( (token) => {
+      return firebase.messaging.getToken().then(token => {
         usersDB.doc(this.$store.state.userInfo.id).update({
           messagingToken: token
         });
@@ -78,4 +81,3 @@ export default {
   }
 };
 </script>
-

@@ -21,7 +21,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore()
 const auth = firebase.auth()
 const functions = firebase.functions()
-const messaging = firebase.messaging()
+//const messaging = firebase.messaging()
 const currentUser = auth.currentUser
 
 // firebase collections
@@ -35,7 +35,7 @@ export {
     db,
     functions,
     auth,
-    messaging,
+    firebase,
     currentUser,
     usersDB,
     deliveryDB,
