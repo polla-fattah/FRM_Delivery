@@ -68,4 +68,5 @@ export default {
     daily: "Daily",
     monthly: "Monthly",
     requested: "Requested",
+    install: "Install",
 };

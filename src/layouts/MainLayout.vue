@@ -94,6 +94,8 @@ export default {
   data() {
     return {
       leftDrawerOpen: false,
+      defferredPrompt: null,
+      installed: false,
       userName: {
         color:
           this.$store.getUserRole == "admin"
@@ -149,11 +151,13 @@ export default {
           level: ["none"],
         },
         {
-          icon: "power_settings_new",
-          text: this.$t("logout"),
+          icon: "get_app",
+          text: this.$t("install"),
           type: "method",
-          url: "logout",
-          level: ["driver", "shop", "admin"],
+          url: "installApp",
+          level: window.matchMedia("(display-mode: standalone)").matches
+            ? []
+            : ["driver", "shop", "admin"],
         },
         {
           icon: "language",
@@ -162,10 +166,30 @@ export default {
           url: "openDrawer",
           level: ["driver", "shop", "admin"],
         },
+        {
+          icon: "power_settings_new",
+          text: this.$t("logout"),
+          type: "method",
+          url: "logout",
+          level: ["driver", "shop", "admin"],
+        },
       ],
     };
   },
+  mounted() {
+    window.addEventListener("beforeinstallprompt", (e) => {
+      this.defferredPrompt = e;
+    });
+  },
   methods: {
+    installApp() {
+      console.log("---------------------");
+      console.log(window.matchMedia("(display-mode: standalone)").matches);
+      console.log(this.defferredPrompt);
+      console.log("---------------------");
+
+      if (this.defferredPrompt) this.defferredPrompt.prompt();
+    },
     openDrawer() {
       this.leftDrawerOpen = true;
     },

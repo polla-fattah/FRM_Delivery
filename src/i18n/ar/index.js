@@ -70,6 +70,5 @@ export default {
     daily: "يومي",
     monthly: "شهري",
     requested: "الطلب",
-
-
+    install: "تنزيل",
 };

@@ -69,6 +69,7 @@ export default {
     daily: "رۆژانە",
     monthly: "مانگەنە",
     requested: "داواکراو",
+    install: "داگرتن",
 
 
 
