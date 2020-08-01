@@ -3,8 +3,5 @@
   "appName": "FRM Delivery",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "www",
-  "server": {
-    "url": "https://192.168.100.216:8080"
-  }
+  "webDir": "www"
 }
